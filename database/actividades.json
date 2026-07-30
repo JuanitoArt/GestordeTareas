@@ -1,11 +1,11 @@
 [
     {
-        "id": "1",
-        "titulo": "Estudiar",
-        "descripcion": "Clase de Ingles",
+        "id": 1,
+        "titulo": "Gestor",
+        "descripcion": "Trabajar en el gestor",
         "fecha": "2026-07-30",
-        "hora_inicio": "06:30",
-        "hora_fin": "13:00",
-        "lugar": "Sena"
+        "hora_inicio": "19:00",
+        "hora_fin": "22:00",
+        "lugar": "casita"
     }
 ]

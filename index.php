@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/config/zonahoraria.php';
 require_once __DIR__ . '/controllers/TareaController.php';
 require_once __DIR__ . '/controllers/ActividadController.php';
 
@@ -166,52 +167,218 @@ switch ($accion) {
 
     case 'inicio':
 
-        // ...
 
         $tareas = $tareaController->listar();
         $actividades = $actividadController->listar();
 
-        ?>
+        $nombreUsuario = "Juan";
 
-        <!DOCTYPE html>
-        <html lang="es">
+        $dias = [
+        'Sunday' => 'Domingo',
+        'Monday' => 'Lunes',
+        'Tuesday' => 'Martes',
+        'Wednesday' => 'Miércoles',
+        'Thursday' => 'Jueves',
+        'Friday' => 'Viernes',
+        'Saturday' => 'Sábado'
+    ];
 
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    $meses = [
+        1 => 'enero',
+        2 => 'febrero',
+        3 => 'marzo',
+        4 => 'abril',
+        5 => 'mayo',
+        6 => 'junio',
+        7 => 'julio',
+        8 => 'agosto',
+        9 => 'septiembre',
+        10 => 'octubre',
+        11 => 'noviembre',
+        12 => 'diciembre'
+    ];
 
-            <title>Gestor de Tareas</title>
-        </head>
+    $fechaActual =
+        $dias[date('l')] . ", " .
+        date('d') . " de " .
+        $meses[(int)date('n')] . " de " .
+        date('Y');
 
-        <body>
+    // Contar solo las tareas pendientes o en progreso
+    $tareasPendientes = 0;
 
-            <h1>📅 Mi Agenda Digital</h1>
+    foreach ($tareas as $tarea) {
 
-            <h2>Resumen</h2>
+        if (
+            $tarea['estado'] == 'Pendiente' ||
+            $tarea['estado'] == 'En progreso'
+        ) {
+            $tareasPendientes++;
+        }
+    }
 
-            <p>Total de tareas: <?= count($tareas) ?></p>
+    // Buscar la próxima actividad
+    $proximaActividad = null;
 
-            <p>Total de actividades: <?= count($actividades) ?></p>
+// Ordenar las actividades por fecha y hora
+usort($actividades, function ($a, $b) {
 
-            <hr>
+    return strtotime($a['fecha'] . ' ' . $a['hora_inicio'])
+        <=> strtotime($b['fecha'] . ' ' . $b['hora_inicio']);
 
-            <a href="index.php?accion=tareas">
-                📋 Ver tareas
-            </a>
+});
 
-            <br><br>
+// Buscar la primera actividad que aún no haya comenzado
+$ahora = time();
 
-            <a href="index.php?accion=actividades">
-                📅 Ver actividades
-            </a>
 
-        </body>
 
-        </html>
+foreach ($actividades as $actividad) {
 
-        <?php
+    $fechaHoraActividad = strtotime(
+        $actividad['fecha'] . ' ' . $actividad['hora_inicio']
+    );
 
+    if ($fechaHoraActividad >= $ahora) {
+
+        $proximaActividad = $actividad;
         break;
+    }
+}
+
+$horaInicio = '';
+$horaFin = '';
+$fechaActividad = '';
+
+if ($proximaActividad) {
+
+    $horaInicio = date(
+        'g:i a',
+        strtotime($proximaActividad['hora_inicio'])
+    );
+
+    $horaFin = date(
+        'g:i a',
+        strtotime($proximaActividad['hora_fin'])
+    );
+
+    $fecha = $proximaActividad['fecha'];
+
+    if ($fecha == date('Y-m-d')) {
+
+        $fechaActividad = "Hoy";
+
+    } elseif ($fecha == date('Y-m-d', strtotime('+1 day'))) {
+
+        $fechaActividad = "Mañana";
+
+    } else {
+
+        $fechaActividad =
+            $dias[date('l', strtotime($fecha))] . ", " .
+            date('d', strtotime($fecha)) . " de " .
+            $meses[(int)date('n', strtotime($fecha))] . " de " .
+            date('Y', strtotime($fecha));
+    }
+}
+
+    // Mensaje dinámico
+    if ($tareasPendientes == 0) {
+
+        $mensaje = "🎉 Hoy estás libre. ¡Disfruta tu día!";
+
+    } elseif ($tareasPendientes == 1) {
+
+        $mensaje = "🎯 Solo te queda una tarea. ¡Ya casi terminas!";
+
+    } elseif ($tareasPendientes <= 3) {
+
+        $mensaje = "🙂 Te quedan algunas cosas por hacer. ¡Ánimo!";
+
+    } else {
+
+        $mensaje = "💪 Tienes mucho por hacer hoy.";
+    }
+
+            ?>
+
+            <!DOCTYPE html>
+            <html lang="es">
+
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+                <title>Gestor de Tareas</title>
+            </head>
+
+            <body>
+
+    <h1>📌 Gestor de Tareas</h1>
+
+    <h2>👋 ¡Bienvenido, <?= $nombreUsuario ?>!</h2>
+
+    <p>
+    📅 <?= $fechaActual ?>
+</p>
+
+    <h3><?= $mensaje ?></h3>
+
+    <hr>
+
+    <h3>📋 Tareas pendientes</h3>
+
+    <p>
+        <?= $tareasPendientes ?>
+    </p>
+
+    <hr>
+
+    <h3>📅 Próxima actividad</h3>
+
+    <?php if ($proximaActividad): ?>
+
+        <strong>
+            <?= htmlspecialchars($proximaActividad['titulo']) ?>
+        </strong>
+
+        <br>
+
+        🗓️ <?= $fechaActividad ?>
+
+        <br>
+
+        🕒 <?= $horaInicio ?> - <?= $horaFin ?>
+
+        <br>
+
+        📍 <?= htmlspecialchars($proximaActividad['lugar']) ?>
+
+    <?php else: ?>
+
+        <p>No tienes actividades programadas.</p>
+
+    <?php endif; ?>
+
+    <hr>
+
+    <a href="index.php?accion=tareas">
+        📋 Ver tareas
+    </a>
+
+    <br><br>
+
+    <a href="index.php?accion=actividades">
+        📅 Ver actividades
+    </a>
+
+</body>
+
+            </html>
+
+            <?php
+
+            break;
 
     default:
 
