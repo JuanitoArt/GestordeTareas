@@ -10,6 +10,35 @@ $accion = $_GET['accion'] ?? 'inicio';
 
 switch ($accion) {
 
+    case 'actualizarTarea':
+
+    $id = $_GET['id'];
+
+    $datos = [
+        'titulo' => $_POST['titulo'] ?? '',
+        'descripcion' => $_POST['descripcion'] ?? '',
+        'prioridad' => $_POST['prioridad'] ?? '',
+        'fecha_limite' => $_POST['fecha_limite'] ?? '',
+        'estado' => $_POST['estado'] ?? ''
+    ];
+
+    $resultado = $tareaController->actualizar($id, $datos);
+
+    header('Location: index.php?accion=tareas');
+    exit;
+
+    break;
+
+    case 'editarTarea':
+
+    $id = $_GET['id'];
+
+    $tarea = $tareaController->buscarPorId($id);
+
+    require_once __DIR__ . '/views/tareas/editar.php';
+
+    break;
+
     case 'guardarTarea':
 
         $datos = [

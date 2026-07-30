@@ -53,13 +53,13 @@
                     </td>
 
                     <td>
-                        <a href="../../index.php?accion=editarTarea&id=<?= $tarea['id'] ?>">
+                       <a href="index.php?accion=editarTarea&id=<?= $tarea['id'] ?>">
                             ✏️ Editar
                         </a>
 
                         |
 
-                        <a href="../../index.php?accion=eliminarTarea&id=<?= $tarea['id'] ?>"
+                        <a href="index.php?accion=eliminarTarea&id=<?= $tarea['id'] ?>"
                            onclick="return confirm('¿Seguro que deseas eliminar esta tarea?')">
                             🗑️ Eliminar
                         </a>

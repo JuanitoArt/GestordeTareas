@@ -1,10 +1,10 @@
 [
     {
         "id": 1,
-        "titulo": "Acabar proyecto",
+        "titulo": "Proyecto",
         "descripcion": "Acabar el proyecto de  gestor de tareas con php",
         "prioridad": "Alta",
         "fecha_limite": "2026-07-30",
-        "estado": "Pendiente"
+        "estado": "En progreso"
     }
 ]
