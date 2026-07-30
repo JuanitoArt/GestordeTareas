@@ -10,6 +10,29 @@ $accion = $_GET['accion'] ?? 'inicio';
 
 switch ($accion) {
 
+    case 'guardarTarea':
+
+        $datos = [
+            'titulo' => $_POST['titulo'] ?? '',
+            'descripcion' => $_POST['descripcion'] ?? '',
+            'prioridad' => $_POST['prioridad'] ?? '',
+            'fecha_limite' => $_POST['fecha_limite'] ?? '',
+            'estado' => 'Pendiente'
+        ];
+
+        $resultado = $tareaController->crear($datos);
+
+        header('Location: index.php?accion=tareas');
+        exit;
+
+        break;
+
+    case 'crearTarea':
+
+        require_once __DIR__ . '/views/tareas/crear.php';
+
+        break;
+
     case 'tareas':
 
         $tareas = $tareaController->listar();
@@ -19,6 +42,8 @@ switch ($accion) {
         break;
 
     case 'inicio':
+
+        // ...
 
         $tareas = $tareaController->listar();
         $actividades = $actividadController->listar();
