@@ -32,49 +32,26 @@ class Actividad
     }
 
     // Crear una actividad
-    public function crear($datos)
-    {
-        $actividades = $this->listar();
+public function crear($datos)
+{
+    $actividades = $this->listar();
 
-        $nuevaActividad = [
-            'id' => JsonManager::siguienteId($actividades),
-            'titulo' => $datos['titulo'],
-            'descripcion' => $datos['descripcion'],
-            'fecha' => $datos['fecha'],
-            'hora' => $datos['hora'],
-            'lugar' => $datos['lugar']
-        ];
+    $nuevaActividad = [
+    'id' => JsonManager::siguienteId($actividades),
+    'titulo' => $datos['titulo'],
+    'descripcion' => $datos['descripcion'],
+    'fecha' => $datos['fecha'],
+    'hora_inicio' => $datos['hora_inicio'],
+    'hora_fin' => $datos['hora_fin'],
+    'lugar' => $datos['lugar']
+];
 
-        $actividades[] = $nuevaActividad;
+    $actividades[] = $nuevaActividad;
 
-        JsonManager::guardar($this->archivo, $actividades);
+    JsonManager::guardar($this->archivo, $actividades);
 
-        return $nuevaActividad;
-    }
-
-    // Editar una actividad
-    public function actualizar($id, $datos)
-    {
-        $actividades = $this->listar();
-
-        foreach ($actividades as $indice => $actividad) {
-
-            if ($actividad['id'] == $id) {
-
-                $actividades[$indice]['titulo'] = $datos['titulo'];
-                $actividades[$indice]['descripcion'] = $datos['descripcion'];
-                $actividades[$indice]['fecha'] = $datos['fecha'];
-                $actividades[$indice]['hora'] = $datos['hora'];
-                $actividades[$indice]['lugar'] = $datos['lugar'];
-
-                JsonManager::guardar($this->archivo, $actividades);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
+    return $nuevaActividad;
+}
 
     // Eliminar una actividad
     public function eliminar($id)
@@ -97,4 +74,32 @@ class Actividad
 
         return false;
     }
+
+    // Actualizar una actividad
+    public function actualizar($id, $datos)
+{
+    $actividades = $this->listar();
+
+    foreach ($actividades as $indice => $actividad) {
+
+        if ($actividad['id'] == $id) {
+
+            $actividades[$indice] = [
+                'id' => $id,
+                'titulo' => $datos['titulo'],
+                'descripcion' => $datos['descripcion'],
+                'fecha' => $datos['fecha'],
+                'hora_inicio' => $datos['hora_inicio'],
+                'hora_fin' => $datos['hora_fin'],
+                'lugar' => $datos['lugar']
+            ];
+
+            JsonManager::guardar($this->archivo, $actividades);
+
+            return true;
+        }
+    }
+
+    return false;
+}
 }

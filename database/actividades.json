@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "id": "1",
+        "titulo": "Estudiar",
+        "descripcion": "Clase de Ingles",
+        "fecha": "2026-07-30",
+        "hora_inicio": "06:30",
+        "hora_fin": "13:00",
+        "lugar": "Sena"
+    }
+]
