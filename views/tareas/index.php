@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../layouts/navbar.php'; ?>
 <h2>📋 Mis Tareas</h2>
 
 <a href="index.php?accion=crearTarea">
