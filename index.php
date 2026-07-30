@@ -10,6 +10,17 @@ $accion = $_GET['accion'] ?? 'inicio';
 
 switch ($accion) {
 
+    case 'eliminarTarea':
+
+    $id = $_GET['id'];
+
+    $tareaController->eliminar($id);
+
+    header('Location: index.php?accion=tareas');
+    exit;
+
+    break;
+
     case 'actualizarTarea':
 
     $id = $_GET['id'];

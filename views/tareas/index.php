@@ -1,6 +1,6 @@
 <h2>📋 Mis Tareas</h2>
 
-<a href="../../index.php?accion=crearTarea">
+<a href="index.php?accion=crearTarea">
     ➕ Nueva tarea
 </a>
 
