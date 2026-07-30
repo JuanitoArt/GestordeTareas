@@ -6,31 +6,69 @@ require_once __DIR__ . '/controllers/ActividadController.php';
 $tareaController = new TareaController();
 $actividadController = new ActividadController();
 
-$tareas = $tareaController->listar();
-$actividades = $actividadController->listar();
+$accion = $_GET['accion'] ?? 'inicio';
 
-?>
+switch ($accion) {
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    case 'tareas':
 
-    <title>Gestor de Tareas</title>
-</head>
+        $tareas = $tareaController->listar();
 
-<body>
+        require_once __DIR__ . '/views/tareas/index.php';
 
-    <h1>📅 Mi Agenda Digital</h1>
+        break;
 
-    <h2>Tareas</h2>
+    case 'inicio':
 
-    <p>Total de tareas: <?= count($tareas) ?></p>
+        $tareas = $tareaController->listar();
+        $actividades = $actividadController->listar();
 
-    <h2>Actividades</h2>
+        ?>
 
-    <p>Total de actividades: <?= count($actividades) ?></p>
+        <!DOCTYPE html>
+        <html lang="es">
 
-</body>
-</html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+            <title>Gestor de Tareas</title>
+        </head>
+
+        <body>
+
+            <h1>📅 Mi Agenda Digital</h1>
+
+            <h2>Resumen</h2>
+
+            <p>Total de tareas: <?= count($tareas) ?></p>
+
+            <p>Total de actividades: <?= count($actividades) ?></p>
+
+            <hr>
+
+            <a href="index.php?accion=tareas">
+                📋 Ver tareas
+            </a>
+
+            <br><br>
+
+            <a href="index.php?accion=actividades">
+                📅 Ver actividades
+            </a>
+
+        </body>
+
+        </html>
+
+        <?php
+
+        break;
+
+    default:
+
+        echo "<h1>404</h1>";
+        echo "<p>La página que buscas no existe.</p>";
+
+        break;
+}
