@@ -135,13 +135,13 @@ switch ($accion) {
 
     case 'guardarTarea':
 
-        $datos = [
-            'titulo' => $_POST['titulo'] ?? '',
-            'descripcion' => $_POST['descripcion'] ?? '',
-            'prioridad' => $_POST['prioridad'] ?? '',
-            'fecha_limite' => $_POST['fecha_limite'] ?? '',
-            'estado' => 'Pendiente'
-        ];
+       $datos = [
+    'titulo' => $_POST['titulo'] ?? '',
+    'descripcion' => $_POST['descripcion'] ?? '',
+    'prioridad' => $_POST['prioridad'] ?? '',
+    'fecha_limite' => $_POST['fecha_limite'] ?? '',
+    'estado' => $_POST['estado'] ?? 'Pendiente'
+];
 
         $resultado = $tareaController->crear($datos);
 

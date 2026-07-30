@@ -63,23 +63,35 @@
 
     <br><br>
 
-    <label>Estado:</label><br>
+   <label>
+    Estado:
+</label>
 
-    <select name="estado">
+<br>
 
-        <option value="Pendiente" <?= $tarea['estado'] == 'Pendiente' ? 'selected' : '' ?>>
-            Pendiente
-        </option>
+<select name="estado">
 
-        <option value="En progreso" <?= $tarea['estado'] == 'En progreso' ? 'selected' : '' ?>>
-            En progreso
-        </option>
+    <option value="Pendiente"
+    <?= $tarea['estado'] == 'Pendiente' ? 'selected' : '' ?>>
+        Pendiente
+    </option>
 
-        <option value="Completada" <?= $tarea['estado'] == 'Completada' ? 'selected' : '' ?>>
-            Completada
-        </option>
+    <option value="En progreso"
+    <?= $tarea['estado'] == 'En progreso' ? 'selected' : '' ?>>
+        En progreso
+    </option>
 
-    </select>
+    <option value="Completada"
+    <?= $tarea['estado'] == 'Completada' ? 'selected' : '' ?>>
+        Completada
+    </option>
+
+    <option value="Cancelada"
+    <?= $tarea['estado'] == 'Cancelada' ? 'selected' : '' ?>>
+        Cancelada
+    </option>
+
+</select>
 
     <br><br>
 

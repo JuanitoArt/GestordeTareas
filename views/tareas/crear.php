@@ -72,6 +72,34 @@
 
         <br>
 
+        <label>
+    Estado:
+</label>
+
+<br>
+
+<select name="estado">
+
+    <option value="Pendiente">
+        Pendiente
+    </option>
+
+    <option value="En progreso">
+        En progreso
+    </option>
+
+    <option value="Completada">
+        Completada
+    </option>
+
+    <option value="Cancelada">
+        Cancelada
+    </option>
+
+</select>
+
+<br><br>
+
         <button type="submit">
             💾 Guardar tarea
         </button>
