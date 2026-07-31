@@ -5,7 +5,7 @@
         "descripcion": "Terminar el gestor ",
         "prioridad": "Alta",
         "fecha_limite": "2026-07-30",
-        "estado": "En progreso"
+        "estado": "Completada"
     },
     {
         "id": 2,
@@ -21,6 +21,6 @@
         "descripcion": "Ir al mercado campesino",
         "prioridad": "Media",
         "fecha_limite": "2026-07-31",
-        "estado": "Pendiente"
+        "estado": "Completada"
     }
 ]

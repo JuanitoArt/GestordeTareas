@@ -285,6 +285,45 @@ case 'tareas':
         $tareas = $tareaController->listar();
         $actividades = $actividadController->listar();
 
+        $pendientes = 0;
+        $enProgreso = 0;
+        $completadas = 0;
+        $canceladas = 0;
+
+        foreach ($tareas as $tarea) {
+
+            switch ($tarea['estado']) {
+
+                case 'Pendiente':
+                    $pendientes++;
+                    break;
+
+                case 'En progreso':
+                    $enProgreso++;
+                    break;
+
+                case 'Completada':
+                    $completadas++;
+                    break;
+
+                case 'Cancelada':
+                    $canceladas++;
+                    break;
+            }
+
+        }
+
+    $actividadesHoy = 0;
+$hoy = date('Y-m-d');
+
+foreach ($actividades as $actividad) {
+
+    if ($actividad['fecha'] == $hoy) {
+        $actividadesHoy++;
+    }
+
+}
+
         $nombreUsuario = "Juan";
 
         $hora = (int) date('H');
@@ -456,11 +495,17 @@ if ($proximaActividad) {
 
     <hr>
 
-    <h3>📋 Tareas pendientes</h3>
+            <h2>📊 Resumen de hoy</h2>
 
-    <p>
-        <?= $tareasPendientes ?>
-    </p>
+            <p>📋 Pendientes: <?= $pendientes ?></p>
+
+            <p>🔄 En progreso: <?= $enProgreso ?></p>
+
+            <p>✅ Completadas: <?= $completadas ?></p>
+
+            <p>❌ Canceladas: <?= $canceladas ?></p>
+
+            <p>📅 Actividades para hoy: <?= $actividadesHoy ?></p>
 
     <hr>
 
