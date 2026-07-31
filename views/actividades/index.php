@@ -11,11 +11,43 @@
         value="<?= htmlspecialchars($_GET['buscar'] ?? '') ?>"
     >
 
+    <select name="fecha">
+
+        <option value="">Todas las fechas</option>
+
+        <option value="hoy"
+            <?= (($_GET['fecha'] ?? '') == 'hoy') ? 'selected' : '' ?>>
+            Hoy
+        </option>
+
+        <option value="manana"
+            <?= (($_GET['fecha'] ?? '') == 'manana') ? 'selected' : '' ?>>
+            Mañana
+        </option>
+
+        <option value="semana"
+            <?= (($_GET['fecha'] ?? '') == 'semana') ? 'selected' : '' ?>>
+            Esta semana
+        </option>
+
+        <option value="mes"
+            <?= (($_GET['fecha'] ?? '') == 'mes') ? 'selected' : '' ?>>
+            Este mes
+        </option>
+
+    </select>
+
     <button type="submit">
-        Buscar
+        🔍 Aplicar
     </button>
 
+    <a href="index.php?accion=actividades">
+        🧹 Limpiar
+    </a>
+
 </form>
+
+<br>
 
 <br>
 

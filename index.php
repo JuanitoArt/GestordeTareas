@@ -90,6 +90,7 @@ switch ($accion) {
 
     $actividades = $actividadController->listar();
 
+    // Buscar por texto
     if (!empty($_GET['buscar'])) {
 
         $buscar = strtolower(trim($_GET['buscar']));
@@ -102,6 +103,63 @@ switch ($accion) {
                 str_contains(strtolower($actividad['lugar']), $buscar);
 
         });
+
+    }
+
+    // Filtrar por fecha
+    if (!empty($_GET['fecha'])) {
+
+        $hoy = date('Y-m-d');
+
+        switch ($_GET['fecha']) {
+
+            case 'hoy':
+
+                $actividades = array_filter($actividades, function ($actividad) use ($hoy) {
+
+                    return $actividad['fecha'] == $hoy;
+
+                });
+
+                break;
+
+            case 'manana':
+
+                $manana = date('Y-m-d', strtotime('+1 day'));
+
+                $actividades = array_filter($actividades, function ($actividad) use ($manana) {
+
+                    return $actividad['fecha'] == $manana;
+
+                });
+
+                break;
+
+            case 'semana':
+
+                $finSemana = date('Y-m-d', strtotime('+7 days'));
+
+                $actividades = array_filter($actividades, function ($actividad) use ($hoy, $finSemana) {
+
+                    return $actividad['fecha'] >= $hoy &&
+                           $actividad['fecha'] <= $finSemana;
+
+                });
+
+                break;
+
+            case 'mes':
+
+                $mesActual = date('Y-m');
+
+                $actividades = array_filter($actividades, function ($actividad) use ($mesActual) {
+
+                    return substr($actividad['fecha'], 0, 7) == $mesActual;
+
+                });
+
+                break;
+        }
 
     }
 
