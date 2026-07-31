@@ -1,6 +1,25 @@
 <?php require_once __DIR__ . '/../layouts/navbar.php'; ?>
-<h2>📋 Mis Tareas</h2>
 
+<form method="GET" action="index.php">
+
+    <input type="hidden" name="accion" value="tareas">
+
+    <input
+        type="text"
+        name="buscar"
+        placeholder="🔎 Buscar tarea..."
+        value="<?= htmlspecialchars($_GET['buscar'] ?? '') ?>"
+    >
+
+    <button type="submit">
+        Buscar
+    </button>
+
+</form>
+
+<br>
+
+<h2>📋 Mis Tareas</h2>
 <a href="index.php?accion=crearTarea">
     ➕ Nueva tarea
 </a>

@@ -41,7 +41,7 @@ switch ($accion) {
 
     break;
 
-    case 'eliminarActividad':
+    case 'eliminarAct+ividad':
 
     $id = $_GET['id'];
 
@@ -157,14 +157,28 @@ switch ($accion) {
 
         break;
 
-    case 'tareas':
+   case 'tareas':
 
-        $tareas = $tareaController->listar();
+    $tareas = $tareaController->listar();
 
-        require_once __DIR__ . '/views/tareas/index.php';
+    if (!empty($_GET['buscar'])) {
 
-        break;
+        $buscar = strtolower(trim($_GET['buscar']));
 
+        $tareas = array_filter($tareas, function ($tarea) use ($buscar) {
+
+            return
+                str_contains(strtolower($tarea['titulo']), $buscar) ||
+                str_contains(strtolower($tarea['descripcion']), $buscar);
+
+        });
+
+    }
+
+    require_once __DIR__ . '/views/tareas/index.php';
+
+    break;
+    
     case 'inicio':
 
 

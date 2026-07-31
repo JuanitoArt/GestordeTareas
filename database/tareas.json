@@ -6,5 +6,21 @@
         "prioridad": "Alta",
         "fecha_limite": "2026-07-30",
         "estado": "En progreso"
+    },
+    {
+        "id": 2,
+        "titulo": "dormir",
+        "descripcion": "dormir",
+        "prioridad": "Alta",
+        "fecha_limite": "2026-07-30",
+        "estado": "Pendiente"
+    },
+    {
+        "id": 3,
+        "titulo": "Sena",
+        "descripcion": "Ir al mercado campesino",
+        "prioridad": "Media",
+        "fecha_limite": "2026-07-31",
+        "estado": "Pendiente"
     }
 ]
