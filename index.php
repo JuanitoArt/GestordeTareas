@@ -287,6 +287,22 @@ case 'tareas':
 
         $nombreUsuario = "Juan";
 
+        $hora = (int) date('H');
+
+if ($hora >= 5 && $hora < 12) {
+
+    $saludo = "🌅 Buenos días";
+
+} elseif ($hora >= 12 && $hora < 18) {
+
+    $saludo = "☀️ Buenas tardes";
+
+} else {
+
+    $saludo = "🌙 Buenas noches";
+
+}
+
         $dias = [
         'Sunday' => 'Domingo',
         'Monday' => 'Lunes',
@@ -430,7 +446,7 @@ if ($proximaActividad) {
 
     <h1>📌 Gestor de Tareas</h1>
 
-    <h2>👋 ¡Bienvenido, <?= $nombreUsuario ?>!</h2>
+    <h2><?= $saludo ?>, <?= htmlspecialchars($nombreUsuario) ?></h2>
 
     <p>
     📅 <?= $fechaActual ?>
