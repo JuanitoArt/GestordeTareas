@@ -11,37 +11,64 @@
         value="<?= htmlspecialchars($_GET['buscar'] ?? '') ?>"
     >
 
-    <button type="submit">
-        Buscar
-    </button>
-
-</form>
-
-<form method="GET" action="index.php">
-
-    <input type="hidden" name="accion" value="tareas">
-
-    <label>Estado:</label>
-
     <select name="estado">
 
-        <option value="">Todos</option>
+        <option value="">Todos los estados</option>
 
-        <option value="Pendiente">Pendiente</option>
+        <option value="Pendiente"
+            <?= (($_GET['estado'] ?? '') == 'Pendiente') ? 'selected' : '' ?>>
+            Pendiente
+        </option>
 
-        <option value="En progreso">En progreso</option>
+        <option value="En progreso"
+            <?= (($_GET['estado'] ?? '') == 'En progreso') ? 'selected' : '' ?>>
+            En progreso
+        </option>
 
-        <option value="Completada">Completada</option>
+        <option value="Completada"
+            <?= (($_GET['estado'] ?? '') == 'Completada') ? 'selected' : '' ?>>
+            Completada
+        </option>
 
-        <option value="Cancelada">Cancelada</option>
+        <option value="Cancelada"
+            <?= (($_GET['estado'] ?? '') == 'Cancelada') ? 'selected' : '' ?>>
+            Cancelada
+        </option>
 
     </select>
 
-    <button type="submit">
-        Filtrar
-    </button>
+    <select name="prioridad">
 
+    <option value="">Todas las prioridades</option>
+
+    <option value="Alta"
+        <?= (($_GET['prioridad'] ?? '') == 'Alta') ? 'selected' : '' ?>>
+        Alta
+    </option>
+
+    <option value="Media"
+        <?= (($_GET['prioridad'] ?? '') == 'Media') ? 'selected' : '' ?>>
+        Media
+    </option>
+
+    <option value="Baja"
+        <?= (($_GET['prioridad'] ?? '') == 'Baja') ? 'selected' : '' ?>>
+        Baja
+    </option>
+
+</select>
+
+    <button type="submit">
+        🔍 Aplicar
+    </button>
+    <a href="index.php?accion=tareas">
+    🧹 Limpiar
+    </a>
 </form>
+
+<br>
+
+
 
 <br>
 

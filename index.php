@@ -204,6 +204,19 @@ case 'tareas':
 
     }
 
+    // Filtrar por prioridad
+    if (!empty($_GET['prioridad'])) {
+
+        $prioridad = $_GET['prioridad'];
+
+        $tareas = array_filter($tareas, function ($tarea) use ($prioridad) {
+
+            return $tarea['prioridad'] == $prioridad;
+
+       });
+
+    }
+
     require_once __DIR__ . '/views/tareas/index.php';
 
     break;
