@@ -17,6 +17,34 @@
 
 </form>
 
+<form method="GET" action="index.php">
+
+    <input type="hidden" name="accion" value="tareas">
+
+    <label>Estado:</label>
+
+    <select name="estado">
+
+        <option value="">Todos</option>
+
+        <option value="Pendiente">Pendiente</option>
+
+        <option value="En progreso">En progreso</option>
+
+        <option value="Completada">Completada</option>
+
+        <option value="Cancelada">Cancelada</option>
+
+    </select>
+
+    <button type="submit">
+        Filtrar
+    </button>
+
+</form>
+
+<br>
+
 <br>
 
 <h2>📋 Mis Tareas</h2>

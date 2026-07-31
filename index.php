@@ -172,10 +172,11 @@ switch ($accion) {
 
         break;
 
-   case 'tareas':
+case 'tareas':
 
     $tareas = $tareaController->listar();
 
+    // Buscar por texto
     if (!empty($_GET['buscar'])) {
 
         $buscar = strtolower(trim($_GET['buscar']));
@@ -185,6 +186,19 @@ switch ($accion) {
             return
                 str_contains(strtolower($tarea['titulo']), $buscar) ||
                 str_contains(strtolower($tarea['descripcion']), $buscar);
+
+        });
+
+    }
+
+    // Filtrar por estado
+    if (!empty($_GET['estado'])) {
+
+        $estado = $_GET['estado'];
+
+        $tareas = array_filter($tareas, function ($tarea) use ($estado) {
+
+            return $tarea['estado'] == $estado;
 
         });
 
