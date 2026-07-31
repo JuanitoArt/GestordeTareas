@@ -1,4 +1,24 @@
 <?php require_once __DIR__ . '/../layouts/navbar.php'; ?>
+
+<form method="GET" action="index.php">
+
+    <input type="hidden" name="accion" value="actividades">
+
+    <input
+        type="text"
+        name="buscar"
+        placeholder="🔎 Buscar actividad..."
+        value="<?= htmlspecialchars($_GET['buscar'] ?? '') ?>"
+    >
+
+    <button type="submit">
+        Buscar
+    </button>
+
+</form>
+
+<br>
+
 <h2>📅 Mis Actividades</h2>
 
 <a href="index.php?accion=crearActividad">

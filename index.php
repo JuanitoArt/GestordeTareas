@@ -86,9 +86,24 @@ switch ($accion) {
 
     break;
 
-   case 'actividades':
+  case 'actividades':
 
     $actividades = $actividadController->listar();
+
+    if (!empty($_GET['buscar'])) {
+
+        $buscar = strtolower(trim($_GET['buscar']));
+
+        $actividades = array_filter($actividades, function ($actividad) use ($buscar) {
+
+            return
+                str_contains(strtolower($actividad['titulo']), $buscar) ||
+                str_contains(strtolower($actividad['descripcion']), $buscar) ||
+                str_contains(strtolower($actividad['lugar']), $buscar);
+
+        });
+
+    }
 
     require_once __DIR__ . '/views/actividades/index.php';
 
@@ -178,7 +193,7 @@ switch ($accion) {
     require_once __DIR__ . '/views/tareas/index.php';
 
     break;
-    
+
     case 'inicio':
 
 

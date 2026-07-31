@@ -7,5 +7,23 @@
         "hora_inicio": "19:00",
         "hora_fin": "22:00",
         "lugar": "casita"
+    },
+    {
+        "id": 2,
+        "titulo": "Estudiar",
+        "descripcion": "Ir al sena ",
+        "fecha": "2026-07-31",
+        "hora_inicio": "06:30",
+        "hora_fin": "12:30",
+        "lugar": "Sena"
+    },
+    {
+        "id": "3",
+        "titulo": "Proyecto",
+        "descripcion": "Trabajar en el gestor",
+        "fecha": "2026-07-31",
+        "hora_inicio": "15:00",
+        "hora_fin": "22:00",
+        "lugar": "ksa"
     }
 ]
