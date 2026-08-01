@@ -41,7 +41,7 @@ switch ($accion) {
 
     break;
 
-    case 'eliminarAct+ividad':
+    case 'eliminarActividad':
 
     $id = $_GET['id'];
 
