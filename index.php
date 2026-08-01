@@ -31,15 +31,6 @@ switch ($accion) {
 
     break;
 
-    case 'editarActividad':
-
-    $id = $_GET['id'];
-
-    $actividad = $actividadController->buscarPorId($id);
-
-    require_once __DIR__ . '/views/actividades/editar.php';
-
-    break;
 
     case 'eliminarActividad':
 

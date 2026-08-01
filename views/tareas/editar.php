@@ -1,21 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
+<?php
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar tarea</title>
-</head>
+$titulo = "Editar tarea";
 
-<body>
+require_once __DIR__ . '/../layouts/header.php';
+require_once __DIR__ . '/../layouts/navbar.php';
+
+/** @var array $tarea */
+
+?>
 
 <h1>✏️ Editar tarea</h1>
 
 <form action="index.php?accion=actualizarTarea&id=<?= $tarea['id'] ?>" method="POST">
 
-    <label>Título:</label><br>
+    <label for="titulo">Título:</label><br>
+
     <input
         type="text"
+        id="titulo"
         name="titulo"
         value="<?= htmlspecialchars($tarea['titulo']) ?>"
         required
@@ -23,8 +25,10 @@
 
     <br><br>
 
-    <label>Descripción:</label><br>
+    <label for="descripcion">Descripción:</label><br>
+
     <textarea
+        id="descripcion"
         name="descripcion"
         rows="4"
         required
@@ -32,19 +36,22 @@
 
     <br><br>
 
-    <label>Prioridad:</label><br>
+    <label for="prioridad">Prioridad:</label><br>
 
-    <select name="prioridad" required>
+    <select id="prioridad" name="prioridad" required>
 
-        <option value="Baja" <?= $tarea['prioridad'] == 'Baja' ? 'selected' : '' ?>>
+        <option value="Baja"
+            <?= $tarea['prioridad'] == 'Baja' ? 'selected' : '' ?>>
             Baja
         </option>
 
-        <option value="Media" <?= $tarea['prioridad'] == 'Media' ? 'selected' : '' ?>>
+        <option value="Media"
+            <?= $tarea['prioridad'] == 'Media' ? 'selected' : '' ?>>
             Media
         </option>
 
-        <option value="Alta" <?= $tarea['prioridad'] == 'Alta' ? 'selected' : '' ?>>
+        <option value="Alta"
+            <?= $tarea['prioridad'] == 'Alta' ? 'selected' : '' ?>>
             Alta
         </option>
 
@@ -52,10 +59,11 @@
 
     <br><br>
 
-    <label>Fecha límite:</label><br>
+    <label for="fecha_limite">Fecha límite:</label><br>
 
     <input
         type="date"
+        id="fecha_limite"
         name="fecha_limite"
         value="<?= $tarea['fecha_limite'] ?>"
         required
@@ -63,35 +71,35 @@
 
     <br><br>
 
-   <label>
-    Estado:
-</label>
+    <label for="estado">
+        Estado:
+    </label>
 
-<br>
+    <br>
 
-<select name="estado">
+    <select id="estado" name="estado">
 
-    <option value="Pendiente"
-    <?= $tarea['estado'] == 'Pendiente' ? 'selected' : '' ?>>
-        Pendiente
-    </option>
+        <option value="Pendiente"
+            <?= $tarea['estado'] == 'Pendiente' ? 'selected' : '' ?>>
+            Pendiente
+        </option>
 
-    <option value="En progreso"
-    <?= $tarea['estado'] == 'En progreso' ? 'selected' : '' ?>>
-        En progreso
-    </option>
+        <option value="En progreso"
+            <?= $tarea['estado'] == 'En progreso' ? 'selected' : '' ?>>
+            En progreso
+        </option>
 
-    <option value="Completada"
-    <?= $tarea['estado'] == 'Completada' ? 'selected' : '' ?>>
-        Completada
-    </option>
+        <option value="Completada"
+            <?= $tarea['estado'] == 'Completada' ? 'selected' : '' ?>>
+            Completada
+        </option>
 
-    <option value="Cancelada"
-    <?= $tarea['estado'] == 'Cancelada' ? 'selected' : '' ?>>
-        Cancelada
-    </option>
+        <option value="Cancelada"
+            <?= $tarea['estado'] == 'Cancelada' ? 'selected' : '' ?>>
+            Cancelada
+        </option>
 
-</select>
+    </select>
 
     <br><br>
 
@@ -107,5 +115,4 @@
     ← Volver
 </a>
 
-</body>
-</html>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

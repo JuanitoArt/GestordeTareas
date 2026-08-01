@@ -1,24 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
+<?php
 
-<head>
+$titulo = "Editar actividad";
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+require_once __DIR__ . '/../layouts/header.php';
+require_once __DIR__ . '/../layouts/navbar.php';
 
-    <title>Editar actividad</title>
+/** @var array $actividad */
 
-</head>
-
-<body>
+?>
 
 <h1>✏️ Editar actividad</h1>
 
-
 <form action="index.php?accion=actualizarActividad&id=<?= $actividad['id'] ?>" method="POST">
 
-
-    <label>
+    <label for="titulo">
         Título:
     </label>
 
@@ -26,32 +21,30 @@
 
     <input
         type="text"
+        id="titulo"
         name="titulo"
         value="<?= htmlspecialchars($actividad['titulo']) ?>"
         required
     >
 
-
     <br><br>
 
-
-    <label>
+    <label for="descripcion">
         Descripción:
     </label>
 
     <br>
 
     <textarea
+        id="descripcion"
         name="descripcion"
         rows="4"
         required
     ><?= htmlspecialchars($actividad['descripcion']) ?></textarea>
 
-
     <br><br>
 
-
-    <label>
+    <label for="fecha">
         Fecha:
     </label>
 
@@ -59,16 +52,15 @@
 
     <input
         type="date"
+        id="fecha"
         name="fecha"
         value="<?= $actividad['fecha'] ?>"
         required
     >
 
-
     <br><br>
 
-
-    <label>
+    <label for="hora_inicio">
         Hora inicio:
     </label>
 
@@ -76,16 +68,15 @@
 
     <input
         type="time"
+        id="hora_inicio"
         name="hora_inicio"
         value="<?= $actividad['hora_inicio'] ?>"
         required
     >
 
-
     <br><br>
 
-
-    <label>
+    <label for="hora_fin">
         Hora fin:
     </label>
 
@@ -93,16 +84,15 @@
 
     <input
         type="time"
+        id="hora_fin"
         name="hora_fin"
         value="<?= $actividad['hora_fin'] ?>"
         required
     >
 
-
     <br><br>
 
-
-    <label>
+    <label for="lugar">
         Lugar:
     </label>
 
@@ -110,31 +100,24 @@
 
     <input
         type="text"
+        id="lugar"
         name="lugar"
         value="<?= htmlspecialchars($actividad['lugar']) ?>"
         required
     >
 
-
     <br><br>
-
 
     <button type="submit">
         💾 Actualizar actividad
     </button>
 
-
 </form>
 
-
 <br>
-
 
 <a href="index.php?accion=actividades">
     ← Volver
 </a>
 
-
-</body>
-
-</html>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

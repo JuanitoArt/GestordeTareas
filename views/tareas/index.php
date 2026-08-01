@@ -1,4 +1,8 @@
-<?php require_once __DIR__ . '/../layouts/navbar.php'; ?>
+<?php
+$titulo = "Mis tareas";
+require_once __DIR__ . '/../layouts/header.php';
+require_once __DIR__ . '/../layouts/navbar.php';
+?>
 
 <form method="GET" action="index.php">
 
@@ -39,42 +43,39 @@
 
     <select name="prioridad">
 
-    <option value="">Todas las prioridades</option>
+        <option value="">Todas las prioridades</option>
 
-    <option value="Alta"
-        <?= (($_GET['prioridad'] ?? '') == 'Alta') ? 'selected' : '' ?>>
-        Alta
-    </option>
+        <option value="Alta"
+            <?= (($_GET['prioridad'] ?? '') == 'Alta') ? 'selected' : '' ?>>
+            Alta
+        </option>
 
-    <option value="Media"
-        <?= (($_GET['prioridad'] ?? '') == 'Media') ? 'selected' : '' ?>>
-        Media
-    </option>
+        <option value="Media"
+            <?= (($_GET['prioridad'] ?? '') == 'Media') ? 'selected' : '' ?>>
+            Media
+        </option>
 
-    <option value="Baja"
-        <?= (($_GET['prioridad'] ?? '') == 'Baja') ? 'selected' : '' ?>>
-        Baja
-    </option>
+        <option value="Baja"
+            <?= (($_GET['prioridad'] ?? '') == 'Baja') ? 'selected' : '' ?>>
+            Baja
+        </option>
 
-</select>
+    </select>
 
     <button type="submit">
         🔍 Aplicar
     </button>
+
     <a href="index.php?accion=tareas">
-    🧹 Limpiar
+        🧹 Limpiar
     </a>
+
 </form>
 
 <br>
 
-
-
-<br>
-
-<br>
-
 <h2>📋 Mis Tareas</h2>
+
 <a href="index.php?accion=crearTarea">
     ➕ Nueva tarea
 </a>
@@ -88,7 +89,9 @@
 <?php else: ?>
 
     <table border="1" cellpadding="10">
+
         <thead>
+
             <tr>
                 <th>ID</th>
                 <th>Título</th>
@@ -98,6 +101,7 @@
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
+
         </thead>
 
         <tbody>
@@ -105,30 +109,22 @@
             <?php foreach ($tareas as $tarea): ?>
 
                 <tr>
+
                     <td><?= $tarea['id'] ?></td>
 
-                    <td>
-                        <?= htmlspecialchars($tarea['titulo']) ?>
-                    </td>
+                    <td><?= htmlspecialchars($tarea['titulo']) ?></td>
+
+                    <td><?= htmlspecialchars($tarea['descripcion']) ?></td>
+
+                    <td><?= htmlspecialchars($tarea['prioridad']) ?></td>
+
+                    <td><?= htmlspecialchars($tarea['fecha_limite']) ?></td>
+
+                    <td><?= htmlspecialchars($tarea['estado']) ?></td>
 
                     <td>
-                        <?= htmlspecialchars($tarea['descripcion']) ?>
-                    </td>
 
-                    <td>
-                        <?= htmlspecialchars($tarea['prioridad']) ?>
-                    </td>
-
-                    <td>
-                        <?= htmlspecialchars($tarea['fecha_limite']) ?>
-                    </td>
-
-                    <td>
-                        <?= htmlspecialchars($tarea['estado']) ?>
-                    </td>
-
-                    <td>
-                       <a href="index.php?accion=editarTarea&id=<?= $tarea['id'] ?>">
+                        <a href="index.php?accion=editarTarea&id=<?= $tarea['id'] ?>">
                             ✏️ Editar
                         </a>
 
@@ -138,12 +134,17 @@
                            onclick="return confirm('¿Seguro que deseas eliminar esta tarea?')">
                             🗑️ Eliminar
                         </a>
+
                     </td>
+
                 </tr>
 
             <?php endforeach; ?>
 
         </tbody>
+
     </table>
 
 <?php endif; ?>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

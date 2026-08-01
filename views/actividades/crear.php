@@ -1,132 +1,113 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Crear actividad</title>
-
-</head>
-
-<body>
+<?php
+$titulo = "Crear actividad";
+require_once __DIR__ . '/../layouts/header.php';
+require_once __DIR__ . '/../layouts/navbar.php';
+?>
 
 <h1>➕ Nueva actividad</h1>
 
-
 <form action="index.php?accion=guardarActividad" method="POST">
 
-
-    <label>
+    <label for="titulo">
         Título:
     </label>
 
     <br>
 
-    <input 
-        type="text" 
+    <input
+        type="text"
+        id="titulo"
         name="titulo"
         required
     >
 
-
     <br><br>
 
-
-    <label>
+    <label for="descripcion">
         Descripción:
     </label>
 
     <br>
 
-    <textarea 
+    <textarea
+        id="descripcion"
         name="descripcion"
         rows="4"
         required
     ></textarea>
 
-
     <br><br>
 
-
-    <label>
+    <label for="fecha">
         Fecha:
     </label>
 
     <br>
 
-    <input 
+    <input
         type="date"
+        id="fecha"
         name="fecha"
         required
     >
 
-
     <br><br>
 
-
-    <label>
+    <label for="hora_inicio">
         Hora inicio:
     </label>
 
     <br>
 
-    <input 
+    <input
         type="time"
+        id="hora_inicio"
         name="hora_inicio"
         required
     >
 
-
     <br><br>
 
-
-    <label>
+    <label for="hora_fin">
         Hora fin:
     </label>
 
     <br>
 
-    <input 
+    <input
         type="time"
+        id="hora_fin"
         name="hora_fin"
         required
     >
 
-<br><br>
-
-<label>
-    Lugar:
-</label>
-
-<br>
-
-<input
-    type="text"
-    name="lugar"
-    required
->
-
     <br><br>
 
+    <label for="lugar">
+        Lugar:
+    </label>
+
+    <br>
+
+    <input
+        type="text"
+        id="lugar"
+        name="lugar"
+        required
+    >
+
+    <br><br>
 
     <button type="submit">
         💾 Guardar actividad
     </button>
 
-
 </form>
 
-
 <br>
-
 
 <a href="index.php?accion=actividades">
     ← Volver
 </a>
 
-
-</body>
-
-</html>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

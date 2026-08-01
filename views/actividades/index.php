@@ -1,4 +1,8 @@
-<?php require_once __DIR__ . '/../layouts/navbar.php'; ?>
+<?php
+$titulo = "Mis actividades";
+require_once __DIR__ . '/../layouts/header.php';
+require_once __DIR__ . '/../layouts/navbar.php';
+?>
 
 <form method="GET" action="index.php">
 
@@ -49,8 +53,6 @@
 
 <br>
 
-<br>
-
 <h2>📅 Mis Actividades</h2>
 
 <a href="index.php?accion=crearActividad">
@@ -65,79 +67,66 @@
 
 <?php else: ?>
 
-<table border="1" cellpadding="10">
+    <table border="1" cellpadding="10">
 
-    <thead>
+        <thead>
 
-        <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Descripción</th>
-            <th>Lugar</th>
-            <th>Fecha</th>
-            <th>Hora inicio</th>
-            <th>Hora fin</th>
-            <th>Acciones</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Lugar</th>
+                <th>Fecha</th>
+                <th>Hora inicio</th>
+                <th>Hora fin</th>
+                <th>Acciones</th>
+            </tr>
 
-    </thead>
+        </thead>
 
+        <tbody>
 
-    <tbody>
+            <?php foreach ($actividades as $actividad): ?>
 
-    <?php foreach ($actividades as $actividad): ?>
+                <tr>
 
-        <tr>
+                    <td><?= $actividad['id'] ?></td>
 
-            <td>
-                <?= $actividad['id'] ?>
-            </td>
+                    <td><?= htmlspecialchars($actividad['titulo']) ?></td>
 
-            <td>
-                <?= htmlspecialchars($actividad['titulo']) ?>
-            </td>
+                    <td><?= htmlspecialchars($actividad['descripcion']) ?></td>
 
-            <td>
-                <?= htmlspecialchars($actividad['descripcion']) ?>
-            </td>
+                    <td><?= htmlspecialchars($actividad['lugar']) ?></td>
 
-            <td>
-                <?= htmlspecialchars($actividad['lugar']) ?>
-            </td>
+                    <td><?= htmlspecialchars($actividad['fecha']) ?></td>
 
-            <td>
-                <?= htmlspecialchars($actividad['fecha']) ?>
-            </td>
+                    <td><?= htmlspecialchars($actividad['hora_inicio']) ?></td>
 
-            <td>
-                <?= htmlspecialchars($actividad['hora_inicio']) ?>
-            </td>
+                    <td><?= htmlspecialchars($actividad['hora_fin']) ?></td>
 
-            <td>
-                <?= htmlspecialchars($actividad['hora_fin']) ?>
-            </td>
+                    <td>
 
-            <td>
+                        <a href="index.php?accion=editarActividad&id=<?= $actividad['id'] ?>">
+                            ✏️ Editar
+                        </a>
 
-                <a href="index.php?accion=editarActividad&id=<?= $actividad['id'] ?>">
-                    ✏️ Editar
-                </a>
+                        |
 
-                |
+                        <a href="index.php?accion=eliminarActividad&id=<?= $actividad['id'] ?>"
+                           onclick="return confirm('¿Eliminar actividad?')">
+                            🗑️ Eliminar
+                        </a>
 
-                <a href="index.php?accion=eliminarActividad&id=<?= $actividad['id'] ?>"
-                onclick="return confirm('¿Eliminar actividad?')">
-                    🗑️ Eliminar
-                </a>
+                    </td>
 
-            </td>
+                </tr>
 
-        </tr>
+            <?php endforeach; ?>
 
-    <?php endforeach; ?>
+        </tbody>
 
-    </tbody>
-
-</table>
+    </table>
 
 <?php endif; ?>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
