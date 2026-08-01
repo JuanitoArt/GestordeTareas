@@ -313,13 +313,25 @@ case 'tareas':
 
         }
 
-    $actividadesHoy = 0;
+$actividadesHoy = 0;
 $hoy = date('Y-m-d');
+$ahora = time();
 
 foreach ($actividades as $actividad) {
 
     if ($actividad['fecha'] == $hoy) {
-        $actividadesHoy++;
+
+        $horaFin = strtotime(
+            $actividad['fecha'] . ' ' . $actividad['hora_fin']
+        );
+
+        // Solo contar actividades que aún no terminan
+        if ($horaFin >= $ahora) {
+
+            $actividadesHoy++;
+
+        }
+
     }
 
 }
@@ -387,7 +399,9 @@ if ($hora >= 5 && $hora < 12) {
     }
 
     // Buscar la próxima actividad
-    $proximaActividad = null;
+$actividadActual = null;
+$proximaActividad = null;
+$tituloActividad = "📅 Próxima actividad";
 
 // Ordenar las actividades por fecha y hora
 usort($actividades, function ($a, $b) {
@@ -397,41 +411,55 @@ usort($actividades, function ($a, $b) {
 
 });
 
-// Buscar la primera actividad que aún no haya comenzado
 $ahora = time();
-
-
 
 foreach ($actividades as $actividad) {
 
-    $fechaHoraActividad = strtotime(
+    $inicio = strtotime(
         $actividad['fecha'] . ' ' . $actividad['hora_inicio']
     );
 
-    if ($fechaHoraActividad >= $ahora) {
+    $fin = strtotime(
+        $actividad['fecha'] . ' ' . $actividad['hora_fin']
+    );
+
+    // Si la actividad está en curso
+    if ($ahora >= $inicio && $ahora <= $fin) {
+
+        $actividadActual = $actividad;
+        $tituloActividad = "🟢 Actividad en curso";
+        break;
+
+    }
+
+    // Guardar la próxima actividad
+    if ($inicio > $ahora && $proximaActividad == null) {
 
         $proximaActividad = $actividad;
-        break;
+
     }
+
 }
+
+$actividadMostrar = $actividadActual ?? $proximaActividad;
 
 $horaInicio = '';
 $horaFin = '';
 $fechaActividad = '';
 
-if ($proximaActividad) {
+if ($actividadMostrar) {
 
-    $horaInicio = date(
-        'g:i a',
-        strtotime($proximaActividad['hora_inicio'])
-    );
+   $horaInicio = date(
+    'g:i a',
+    strtotime($actividadMostrar['hora_inicio'])
+);
 
-    $horaFin = date(
-        'g:i a',
-        strtotime($proximaActividad['hora_fin'])
-    );
+$horaFin = date(
+    'g:i a',
+    strtotime($actividadMostrar['hora_fin'])
+);
 
-    $fecha = $proximaActividad['fecha'];
+$fecha = $actividadMostrar['fecha'];
 
     if ($fecha == date('Y-m-d')) {
 
@@ -509,12 +537,12 @@ if ($proximaActividad) {
 
     <hr>
 
-    <h3>📅 Próxima actividad</h3>
+    <h3><?= $tituloActividad ?></h3>
 
-    <?php if ($proximaActividad): ?>
+    <?php if ($actividadMostrar): ?>
 
         <strong>
-            <?= htmlspecialchars($proximaActividad['titulo']) ?>
+          <?= htmlspecialchars($actividadMostrar['titulo']) ?>
         </strong>
 
         <br>
@@ -527,7 +555,7 @@ if ($proximaActividad) {
 
         <br>
 
-        📍 <?= htmlspecialchars($proximaActividad['lugar']) ?>
+        📍 <?= htmlspecialchars($actividadMostrar['lugar']) ?>
 
     <?php else: ?>
 
