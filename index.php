@@ -276,34 +276,40 @@ case 'tareas':
         $tareas = $tareaController->listar();
         $actividades = $actividadController->listar();
 
-        $pendientes = 0;
-        $enProgreso = 0;
-        $completadas = 0;
-        $canceladas = 0;
+$pendientes = 0;
+$enProgreso = 0;
+$completadas = 0;
+$canceladas = 0;
 
-        foreach ($tareas as $tarea) {
+$hoy = date('Y-m-d');
 
-            switch ($tarea['estado']) {
+foreach ($tareas as $tarea) {
 
-                case 'Pendiente':
-                    $pendientes++;
-                    break;
+    // Solo contar las tareas cuya fecha límite es hoy
+    if ($tarea['fecha_limite'] != $hoy) {
+        continue;
+    }
 
-                case 'En progreso':
-                    $enProgreso++;
-                    break;
+    switch ($tarea['estado']) {
 
-                case 'Completada':
-                    $completadas++;
-                    break;
+        case 'Pendiente':
+            $pendientes++;
+            break;
 
-                case 'Cancelada':
-                    $canceladas++;
-                    break;
-            }
+        case 'En progreso':
+            $enProgreso++;
+            break;
 
-        }
+        case 'Completada':
+            $completadas++;
+            break;
 
+        case 'Cancelada':
+            $canceladas++;
+            break;
+    }
+
+}
 $actividadesHoy = 0;
 $hoy = date('Y-m-d');
 $ahora = time();
@@ -490,86 +496,77 @@ $fecha = $actividadMostrar['fecha'];
 
             ?>
 
-            <!DOCTYPE html>
-            <html lang="es">
+         <?php
+$titulo = "Inicio";
+require_once __DIR__ . '/views/layouts/header.php';
+require_once __DIR__ . '/views/layouts/navbar.php';
+?>
 
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<h1 class="mb-3">📌 Gestor de Tareas</h1>
 
-                <title>Gestor de Tareas</title>
-            </head>
+<h2><?= $saludo ?>, <?= htmlspecialchars($nombreUsuario) ?></h2>
 
-            <body>
-
-    <h1>📌 Gestor de Tareas</h1>
-
-    <h2><?= $saludo ?>, <?= htmlspecialchars($nombreUsuario) ?></h2>
-
-    <p>
+<p class="text-muted">
     📅 <?= $fechaActual ?>
 </p>
 
-    <h3><?= $mensaje ?></h3>
+<h4><?= $mensaje ?></h4>
 
-    <hr>
+<hr>
 
-            <h2>📊 Resumen de hoy</h2>
+<h2>📊 Resumen de hoy</h2>
 
-            <p>📋 Pendientes: <?= $pendientes ?></p>
+<p>📋 Pendientes: <?= $pendientes ?></p>
 
-            <p>🔄 En progreso: <?= $enProgreso ?></p>
+<p>🔄 En progreso: <?= $enProgreso ?></p>
 
-            <p>✅ Completadas: <?= $completadas ?></p>
+<p>✅ Completadas: <?= $completadas ?></p>
 
-            <p>❌ Canceladas: <?= $canceladas ?></p>
+<p>❌ Canceladas: <?= $canceladas ?></p>
 
-            <p>📅 Actividades para hoy: <?= $actividadesHoy ?></p>
+<p>📅 Actividades para hoy: <?= $actividadesHoy ?></p>
 
-    <hr>
+<hr>
 
-    <h3><?= $tituloActividad ?></h3>
+<h3><?= $tituloActividad ?></h3>
 
-    <?php if ($actividadMostrar): ?>
+<?php if ($actividadMostrar): ?>
 
-        <strong>
-          <?= htmlspecialchars($actividadMostrar['titulo']) ?>
-        </strong>
+    <strong>
+        <?= htmlspecialchars($actividadMostrar['titulo']) ?>
+    </strong>
 
-        <br>
+    <br>
 
-        🗓️ <?= $fechaActividad ?>
+    🗓️ <?= $fechaActividad ?>
 
-        <br>
+    <br>
 
-        🕒 <?= $horaInicio ?> - <?= $horaFin ?>
+    🕒 <?= $horaInicio ?> - <?= $horaFin ?>
 
-        <br>
+    <br>
 
-        📍 <?= htmlspecialchars($actividadMostrar['lugar']) ?>
+    📍 <?= htmlspecialchars($actividadMostrar['lugar']) ?>
 
-    <?php else: ?>
+<?php else: ?>
 
-        <p>No tienes actividades programadas.</p>
+    <p>No tienes actividades programadas.</p>
 
-    <?php endif; ?>
+<?php endif; ?>
 
-    <hr>
+<hr>
 
-    <a href="index.php?accion=tareas">
-        📋 Ver tareas
-    </a>
+<a class="btn btn-primary me-2" href="index.php?accion=tareas">
+    <i class="bi bi-list-check"></i>
+    Ver tareas
+</a>
 
-    <br><br>
+<a class="btn btn-success" href="index.php?accion=actividades">
+    <i class="bi bi-calendar-event"></i>
+    Ver actividades
+</a>
 
-    <a href="index.php?accion=actividades">
-        📅 Ver actividades
-    </a>
-
-</body>
-
-            </html>
-
+<?php require_once __DIR__ . '/views/layouts/footer.php'; ?>
             <?php
 
             break;
