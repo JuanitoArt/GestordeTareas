@@ -263,32 +263,29 @@ if (
 
 </p>
 
-            </div>
+            
 
-            <div class="card-footer bg-white border-0">
+         <div class="d-flex justify-content-between">
 
-                <a
-                    href="index.php?accion=editarTarea&id=<?= $tarea['id'] ?>"
-                    class="btn btn-warning btn-sm">
+    <a
+        href="index.php?accion=editarTarea&id=<?= $tarea['id'] ?>"
+        class="btn btn-outline-primary btn-sm">
 
-                    <i class="bi bi-pencil-square"></i>
+        ✏️ Editar
 
-                    Editar
+    </a>
 
-                </a>
+    <a
+        href="index.php?accion=eliminarTarea&id=<?= $tarea['id'] ?>"
+        class="btn btn-outline-danger btn-sm"
+        onclick="return confirm('¿Seguro que deseas eliminar esta tarea?')">
 
-                <a
-                    href="index.php?accion=eliminarTarea&id=<?= $tarea['id'] ?>"
-                    class="btn btn-danger btn-sm"
-                    onclick="return confirm('¿Seguro que deseas eliminar esta tarea?')">
+        🗑️ Eliminar
 
-                    <i class="bi bi-trash"></i>
+    </a>
+</div>
 
-                    Eliminar
-
-                </a>
-
-            </div>
+</div>
 
         </div>
 

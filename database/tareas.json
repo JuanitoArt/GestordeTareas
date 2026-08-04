@@ -1,13 +1,5 @@
 [
     {
-        "id": 1,
-        "titulo": "Acabar proyecto",
-        "descripcion": "Terminar el gestor ",
-        "prioridad": "Alta",
-        "fecha_limite": "2026-07-30",
-        "estado": "Completada"
-    },
-    {
         "id": 2,
         "titulo": "dormir",
         "descripcion": "zzzzzzzzzzzz",
@@ -29,13 +21,21 @@
         "descripcion": "cenar en la noche",
         "prioridad": "Baja",
         "fecha_limite": "2026-08-03",
-        "estado": "Pendiente"
+        "estado": "Completada"
     },
     {
         "id": 5,
         "titulo": "Estudiar",
         "descripcion": "Ir al sena a ver a hader",
         "prioridad": "Alta",
+        "fecha_limite": "2026-08-04",
+        "estado": "Completada"
+    },
+    {
+        "id": 6,
+        "titulo": "Oficio",
+        "descripcion": "Lavar loza y hacer oficio en la casa",
+        "prioridad": "Media",
         "fecha_limite": "2026-08-04",
         "estado": "Pendiente"
     }

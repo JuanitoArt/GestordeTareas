@@ -79,6 +79,30 @@ switch ($accion) {
 
   case 'actividades':
 
+    case 'miDia':
+
+    $actividades = $actividadController->listar();
+
+    $hoy = date('Y-m-d');
+
+    // Solo actividades de hoy
+    $actividades = array_filter($actividades, function ($actividad) use ($hoy) {
+
+        return $actividad['fecha'] == $hoy;
+
+    });
+
+    // Ordenarlas por hora de inicio
+    usort($actividades, function ($a, $b) {
+
+        return strcmp($a['hora_inicio'], $b['hora_inicio']);
+
+    });
+
+    require_once __DIR__ . '/views/actividades/miDia.php';
+
+    break;
+
     $actividades = $actividadController->listar();
 
     // Buscar por texto
@@ -253,6 +277,19 @@ case 'tareas':
 
     }
 
+    // Mostrar solo tareas de hoy (si viene del Dashboard)
+    if (!empty($_GET['hoy'])) {
+
+        $hoy = date('Y-m-d');
+
+        $tareas = array_filter($tareas, function ($tarea) use ($hoy) {
+
+            return $tarea['fecha_limite'] == $hoy;
+
+        });
+
+    }
+
     // Filtrar por prioridad
     if (!empty($_GET['prioridad'])) {
 
@@ -276,6 +313,36 @@ case 'tareas':
         $tareas = $tareaController->listar();
         $actividades = $actividadController->listar();
 
+        $actividadActual = null;
+$proximaActividad = null;
+
+$ahora = time();
+
+usort($actividades, function ($a, $b) {
+    return strtotime($a['fecha'].' '.$a['hora_inicio'])
+        <=> strtotime($b['fecha'].' '.$b['hora_inicio']);
+});
+
+foreach ($actividades as $actividad) {
+
+    $inicio = strtotime($actividad['fecha'].' '.$actividad['hora_inicio']);
+    $fin    = strtotime($actividad['fecha'].' '.$actividad['hora_fin']);
+
+    if ($ahora >= $inicio && $ahora <= $fin) {
+
+        $actividadActual = $actividad;
+        break;
+
+    }
+
+    if ($inicio > $ahora && $proximaActividad == null) {
+
+        $proximaActividad = $actividad;
+
+    }
+
+}
+
 $pendientes = 0;
 $enProgreso = 0;
 $completadas = 0;
@@ -285,24 +352,31 @@ $hoy = date('Y-m-d');
 
 foreach ($tareas as $tarea) {
 
-    // Solo contar las tareas cuya fecha límite es hoy
-    if ($tarea['fecha_limite'] != $hoy) {
-        continue;
-    }
-
     switch ($tarea['estado']) {
 
         case 'Pendiente':
-            $pendientes++;
+
+            if ($tarea['fecha_limite'] == $hoy) {
+                $pendientes++;
+            }
+
             break;
 
         case 'En progreso':
-            $enProgreso++;
+
+            if ($tarea['fecha_limite'] == $hoy) {
+                $enProgreso++;
+            }
+
             break;
 
         case 'Completada':
-            $completadas++;
-            break;
+
+    if ($tarea['fecha_limite'] == $hoy) {
+        $completadas++;
+    }
+
+    break;
 
         case 'Cancelada':
             $canceladas++;
@@ -496,6 +570,7 @@ $fecha = $actividadMostrar['fecha'];
 
             ?>
 
+
          <?php
 $titulo = "Inicio";
 require_once __DIR__ . '/views/layouts/header.php';
@@ -528,83 +603,7 @@ require_once __DIR__ . '/views/layouts/navbar.php';
 </div>
 
 
-<h3 class="mb-4">📊 Resumen de hoy</h3>
 
-<div class="row g-4">
-
-    <div class="col-6 col-md-3">
-
-        <div class="card text-center h-100">
-
-            <div class="card-body">
-
-                <h1>📋</h1>
-
-                <h2><?= $pendientes ?></h2>
-
-                <p class="mb-0">Pendientes</p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-6 col-md-3">
-
-        <div class="card text-center h-100">
-
-            <div class="card-body">
-
-                <h1>🔄</h1>
-
-                <h2><?= $enProgreso ?></h2>
-
-                <p class="mb-0">En progreso</p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-6 col-md-3">
-
-        <div class="card text-center h-100">
-
-            <div class="card-body">
-
-                <h1>✅</h1>
-
-                <h2><?= $completadas ?></h2>
-
-                <p class="mb-0">Completadas</p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-6 col-md-3">
-
-        <div class="card text-center h-100">
-
-            <div class="card-body">
-
-                <h1>📅</h1>
-
-                <h2><?= $actividadesHoy ?></h2>
-
-                <p class="mb-0">Actividades</p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
 
 
 
@@ -665,6 +664,102 @@ require_once __DIR__ . '/views/layouts/navbar.php';
             </div>
 
         <?php endif; ?>
+
+    </div>
+
+</div>
+
+<h3 class="mb-4">📊 Resumen de hoy</h3>
+
+<div class="row g-4">
+
+    <div class="col-6 col-md-3">
+
+    <a href="index.php?accion=tareas&estado=Pendiente&hoy=1"
+       class="text-decoration-none text-dark">
+
+        <div class="card text-center h-100 resumen-card">
+
+            <div class="card-body">
+
+                <h1>📋</h1>
+
+                <h2><?= $pendientes ?></h2>
+
+                <p class="mb-0">Pendientes</p>
+
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+
+    <div class="col-6 col-md-3">
+
+    <a href="index.php?accion=tareas&estado=En progreso&hoy=1"
+       class="text-decoration-none text-dark">
+
+        <div class="card text-center h-100 resumen-card">
+
+            <div class="card-body">
+
+                <h1>🔄</h1>
+
+                <h2><?= $enProgreso ?></h2>
+
+                <p class="mb-0">En progreso</p>
+
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+
+    <div class="col-6 col-md-3">
+
+    <a href="index.php?accion=tareas&estado=Completada&hoy=1"
+       class="text-decoration-none text-dark">
+
+        <div class="card text-center h-100 resumen-card">
+
+            <div class="card-body">
+
+                <h1>✅</h1>
+
+                <h2><?= $completadas ?></h2>
+
+                <p class="mb-0">Completadas</p>
+
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+
+    <div class="col-6 col-md-3">
+
+    <a href="index.php?accion=miDia"
+       class="text-decoration-none text-dark">
+
+        <div class="card text-center h-100">
+
+            <div class="card-body">
+
+                <h1>📅</h1>
+
+                <h2><?= $actividadesHoy ?></h2>
+
+                <p class="mb-0">Actividades</p>
+
+            </div>
+
+        </div>
 
     </div>
 

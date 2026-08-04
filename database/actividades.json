@@ -25,5 +25,14 @@
         "hora_inicio": "06:30",
         "hora_fin": "13:00",
         "lugar": "Sena"
+    },
+    {
+        "id": 5,
+        "titulo": "Proyecto",
+        "descripcion": "Trabajar en el gestor",
+        "fecha": "2026-08-04",
+        "hora_inicio": "16:00",
+        "hora_fin": "22:00",
+        "lugar": "casita"
     }
 ]
