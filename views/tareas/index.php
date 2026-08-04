@@ -84,66 +84,219 @@ require_once __DIR__ . '/../layouts/navbar.php';
 
 <?php if (empty($tareas)): ?>
 
-    <p>No tienes tareas registradas.</p>
+    <div class="card text-center p-5">
+
+        <h1>📋</h1>
+
+        <h4>No tienes tareas registradas</h4>
+
+        <p class="text-muted">
+            Crea tu primera tarea para comenzar.
+        </p>
+
+    </div>
 
 <?php else: ?>
 
-    <table border="1" cellpadding="10">
+<div class="row g-4">
 
-        <thead>
+<?php foreach ($tareas as $tarea): ?>
 
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Prioridad</th>
-                <th>Fecha límite</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
+    <?php
 
-        </thead>
+        switch ($tarea['prioridad']) {
 
-        <tbody>
+            case 'Alta':
+                $prioridad = 'danger';
+                break;
 
-            <?php foreach ($tareas as $tarea): ?>
+            case 'Media':
+                $prioridad = 'warning';
+                break;
 
-                <tr>
+            default:
+                $prioridad = 'success';
+        }
 
-                    <td><?= $tarea['id'] ?></td>
+        switch ($tarea['estado']) {
 
-                    <td><?= htmlspecialchars($tarea['titulo']) ?></td>
+            case 'Pendiente':
+                $estado = 'secondary';
+                break;
 
-                    <td><?= htmlspecialchars($tarea['descripcion']) ?></td>
+            case 'En progreso':
+                $estado = 'primary';
+                break;
 
-                    <td><?= htmlspecialchars($tarea['prioridad']) ?></td>
+            case 'Completada':
+                $estado = 'success';
+                break;
 
-                    <td><?= htmlspecialchars($tarea['fecha_limite']) ?></td>
+            default:
+                $estado = 'dark';
+        }
 
-                    <td><?= htmlspecialchars($tarea['estado']) ?></td>
+    ?>
 
-                    <td>
+    <div class="col-md-6 col-lg-4">
 
-                        <a href="index.php?accion=editarTarea&id=<?= $tarea['id'] ?>">
-                            ✏️ Editar
-                        </a>
+       <div class="card h-100 overflow-hidden">
 
-                        |
+    <div
+        style="
+            height: 8px;
+            background:
+            <?= $tarea['prioridad'] == 'Alta'
+                ? '#EF4444'
+                : ($tarea['prioridad'] == 'Media'
+                    ? '#F59E0B'
+                    : '#22C55E') ?>;
+        ">
+    </div>
 
-                        <a href="index.php?accion=eliminarTarea&id=<?= $tarea['id'] ?>"
-                           onclick="return confirm('¿Seguro que deseas eliminar esta tarea?')">
-                            🗑️ Eliminar
-                        </a>
+    <div class="card-body">
 
-                    </td>
+                <div class="d-flex justify-content-between align-items-center mb-3">
 
-                </tr>
+                    <h5 class="fw-bold mb-0">
 
-            <?php endforeach; ?>
+                        <?= htmlspecialchars($tarea['titulo']) ?>
 
-        </tbody>
+                    </h5>
 
-    </table>
+                    <span class="badge bg-<?= $prioridad ?>">
+
+                        <?= htmlspecialchars($tarea['prioridad']) ?>
+
+                    </span>
+
+                </div>
+
+                <p class="text-muted">
+
+                    <?= htmlspecialchars($tarea['descripcion']) ?>
+
+                </p>
+
+    <?php
+
+if (
+    $tarea['estado'] == 'Pendiente' ||
+    $tarea['estado'] == 'En progreso'
+) {
+
+    $fechaLimite = new DateTime($tarea['fecha_limite']);
+    $hoy = new DateTime(date('Y-m-d'));
+
+    $dias = (int)$hoy->diff($fechaLimite)->format('%r%a');
+
+    if ($dias == 0) {
+
+        $textoFecha = "🔥 Vence hoy";
+
+    } elseif ($dias == 1) {
+
+        $textoFecha = "🌅 Vence mañana";
+
+    } elseif ($dias > 1 && $dias <= 7) {
+
+        $textoFecha = "⏳ Vence en $dias días";
+
+    } elseif ($dias < 0) {
+
+        $textoFecha = "🔴 Venció hace " . abs($dias) . " días";
+
+    } else {
+
+        $textoFecha = "📅 " . date('d/m/Y', strtotime($tarea['fecha_limite']));
+
+    }
+
+} else {
+
+    $textoFecha = "";
+
+}
+?>
+
+       <?php if (!empty($textoFecha)): ?>
+
+    <p class="mb-2">
+
+        <?= $textoFecha ?>
+
+    </p>
+
+<?php endif; ?>
+
+
+    <?php
+
+        switch ($tarea['estado']) {
+
+            case 'Pendiente':
+                $mensajeEstado = "Pendiente, lista para comenzar";
+                break;
+
+            case 'En progreso':
+                $mensajeEstado = "En progreso, ¡esfuérzate!";
+                break;
+
+            case 'Completada':
+                $mensajeEstado = "Completada, ¡Buen trabajo!";
+                break;
+
+            default:
+                $mensajeEstado = "🚫 Cancelada";
+                break;
+        }
+
+        ?>
+
+        <p>
+
+    <span class="badge bg-<?= $estado ?> fs-6">
+
+        <?= $mensajeEstado ?>
+
+    </span>
+
+</p>
+
+            </div>
+
+            <div class="card-footer bg-white border-0">
+
+                <a
+                    href="index.php?accion=editarTarea&id=<?= $tarea['id'] ?>"
+                    class="btn btn-warning btn-sm">
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    Editar
+
+                </a>
+
+                <a
+                    href="index.php?accion=eliminarTarea&id=<?= $tarea['id'] ?>"
+                    class="btn btn-danger btn-sm"
+                    onclick="return confirm('¿Seguro que deseas eliminar esta tarea?')">
+
+                    <i class="bi bi-trash"></i>
+
+                    Eliminar
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<?php endforeach; ?>
+
+</div>
 
 <?php endif; ?>
 

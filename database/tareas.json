@@ -22,5 +22,21 @@
         "prioridad": "Media",
         "fecha_limite": "2026-07-31",
         "estado": "Completada"
+    },
+    {
+        "id": 4,
+        "titulo": "Comer",
+        "descripcion": "cenar en la noche",
+        "prioridad": "Baja",
+        "fecha_limite": "2026-08-03",
+        "estado": "Pendiente"
+    },
+    {
+        "id": 5,
+        "titulo": "Estudiar",
+        "descripcion": "Ir al sena a ver a hader",
+        "prioridad": "Alta",
+        "fecha_limite": "2026-08-04",
+        "estado": "Pendiente"
     }
 ]

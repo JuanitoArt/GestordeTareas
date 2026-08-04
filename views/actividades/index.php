@@ -63,69 +63,110 @@ require_once __DIR__ . '/../layouts/navbar.php';
 
 <?php if (empty($actividades)): ?>
 
-    <p>No tienes actividades registradas.</p>
+    <div class="alert alert-info">
+        📅 No tienes actividades registradas.
+    </div>
 
 <?php else: ?>
 
-    <table border="1" cellpadding="10">
+<div class="row g-4">
 
-        <thead>
+<?php foreach ($actividades as $actividad): ?>
 
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Lugar</th>
-                <th>Fecha</th>
-                <th>Hora inicio</th>
-                <th>Hora fin</th>
-                <th>Acciones</th>
-            </tr>
+<?php
 
-        </thead>
+$fechaActividad = new DateTime($actividad['fecha']);
+$hoy = new DateTime(date('Y-m-d'));
 
-        <tbody>
+$dias = (int)$hoy->diff($fechaActividad)->format('%r%a');
 
-            <?php foreach ($actividades as $actividad): ?>
+if ($dias == 0) {
 
-                <tr>
+    $textoFecha = "📅 Hoy";
 
-                    <td><?= $actividad['id'] ?></td>
+} elseif ($dias == 1) {
 
-                    <td><?= htmlspecialchars($actividad['titulo']) ?></td>
+    $textoFecha = "🌅 Mañana";
 
-                    <td><?= htmlspecialchars($actividad['descripcion']) ?></td>
+} elseif ($dias > 1 && $dias <= 7) {
 
-                    <td><?= htmlspecialchars($actividad['lugar']) ?></td>
+    $textoFecha = "📆 En $dias días";
 
-                    <td><?= htmlspecialchars($actividad['fecha']) ?></td>
+} elseif ($dias < 0) {
 
-                    <td><?= htmlspecialchars($actividad['hora_inicio']) ?></td>
+    $textoFecha = "📂 Hace " . abs($dias) . " días";
 
-                    <td><?= htmlspecialchars($actividad['hora_fin']) ?></td>
+} else {
 
-                    <td>
+    $textoFecha = "📅 " . date('d/m/Y', strtotime($actividad['fecha']));
 
-                        <a href="index.php?accion=editarActividad&id=<?= $actividad['id'] ?>">
-                            ✏️ Editar
-                        </a>
+}
 
-                        |
+?>
 
-                        <a href="index.php?accion=eliminarActividad&id=<?= $actividad['id'] ?>"
-                           onclick="return confirm('¿Eliminar actividad?')">
-                            🗑️ Eliminar
-                        </a>
+<div class="col-md-6 col-lg-4">
 
-                    </td>
+    <div class="card h-100 shadow-sm">
 
-                </tr>
+        <div class="card-body">
 
-            <?php endforeach; ?>
+            <h5 class="card-title">
+                <?= htmlspecialchars($actividad['titulo']) ?>
+            </h5>
 
-        </tbody>
+            <p class="text-muted mb-3">
+                <?= htmlspecialchars($actividad['descripcion']) ?>
+            </p>
 
-    </table>
+            <p class="mb-2">
+                <i class="bi bi-geo-alt-fill text-danger"></i>
+                <?= htmlspecialchars($actividad['lugar']) ?>
+            </p>
+
+            <p class="mb-2">
+                <?= $textoFecha ?>
+            </p>
+
+            <p class="mb-3">
+                <i class="bi bi-clock"></i>
+
+                <?= date('g:i A', strtotime($actividad['hora_inicio'])) ?>
+
+                -
+
+                <?= date('g:i A', strtotime($actividad['hora_fin'])) ?>
+            </p>
+
+            <div class="d-flex justify-content-between">
+
+                <a
+                    href="index.php?accion=editarActividad&id=<?= $actividad['id'] ?>"
+                    class="btn btn-outline-primary btn-sm">
+
+                    ✏️ Editar
+
+                </a>
+
+                <a
+                    href="index.php?accion=eliminarActividad&id=<?= $actividad['id'] ?>"
+                    class="btn btn-outline-danger btn-sm"
+                    onclick="return confirm('¿Eliminar actividad?')">
+
+                    🗑️ Eliminar
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<?php endforeach; ?>
+
+</div>
 
 <?php endif; ?>
 

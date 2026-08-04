@@ -1,0 +1,167 @@
+/* ==========================================================
+                         Diseño
+   ========================================================== */
+
+/* ---------- Variables ---------- */
+
+:root{
+
+    --color-primary: #4F46E5;
+    --color-primary-hover: #4338CA;
+
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+
+    --color-background: #F8FAFC;
+    --color-surface: #FFFFFF;
+
+    --color-text: #1E293B;
+    --color-text-light: #64748B;
+
+    --border-radius: 16px;
+
+    --shadow-sm: 0 4px 12px rgba(0,0,0,.05);
+    --shadow-md: 0 8px 24px rgba(0,0,0,.08);
+
+}
+
+/* ---------- General ---------- */
+
+body{
+
+    font-family: 'Poppins', sans-serif;
+    background: var(--color-background);
+    color: var(--color-text);
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5{
+
+    font-weight: 600;
+
+}
+
+p{
+
+    color: var(--color-text-light);
+
+}
+
+/* ---------- Navbar ---------- */
+
+.navbar{
+
+    border-radius: var(--border-radius);
+
+    box-shadow: var(--shadow-sm);
+
+    background: var(--color-primary) !important;
+
+}
+
+/* ---------- Cards ---------- */
+
+.card{
+
+    border: none;
+
+    border-radius: var(--border-radius);
+
+    box-shadow: var(--shadow-sm);
+
+    transition: .25s;
+
+}
+
+.card:hover{
+
+    transform: translateY(-4px);
+
+    box-shadow: var(--shadow-md);
+
+}
+
+/* ---------- Botones ---------- */
+
+.btn{
+
+    border-radius: 12px;
+
+    font-weight: 500;
+
+    transition: .25s;
+
+}
+
+.btn-primary{
+
+    background: var(--color-primary);
+
+    border: none;
+
+}
+
+.btn-primary:hover{
+
+    background: var(--color-primary-hover);
+
+}
+
+/* ---------- Formularios ---------- */
+
+.form-control,
+.form-select{
+
+    border-radius: 12px;
+
+    padding: 12px;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    box-shadow: 0 0 0 .2rem rgba(79,70,229,.20);
+
+    border-color: var(--color-primary);
+
+}
+
+/* ---------- Tablas ---------- */
+
+table{
+
+    background: white;
+
+    border-radius: var(--border-radius);
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow-sm);
+
+}
+
+thead{
+
+    background: var(--color-primary);
+
+    color: white;
+
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width:768px){
+
+    body{
+
+        padding-bottom:20px;
+
+    }
+
+}

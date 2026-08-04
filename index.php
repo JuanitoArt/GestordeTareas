@@ -502,59 +502,174 @@ require_once __DIR__ . '/views/layouts/header.php';
 require_once __DIR__ . '/views/layouts/navbar.php';
 ?>
 
-<h1 class="mb-3">📌 Gestor de Tareas</h1>
+<div class="card mb-4">
 
-<h2><?= $saludo ?>, <?= htmlspecialchars($nombreUsuario) ?></h2>
+    <div class="card-body">
 
-<p class="text-muted">
-    📅 <?= $fechaActual ?>
-</p>
+        <h2 class="mb-2">
+            <?= $saludo ?>,
+            <?= htmlspecialchars($nombreUsuario) ?> 👋
+        </h2>
 
-<h4><?= $mensaje ?></h4>
+        <p class="mb-2 text-muted">
 
-<hr>
+            📅 <?= $fechaActual ?>
 
-<h2>📊 Resumen de hoy</h2>
+        </p>
 
-<p>📋 Pendientes: <?= $pendientes ?></p>
+        <h5>
 
-<p>🔄 En progreso: <?= $enProgreso ?></p>
+            <?= $mensaje ?>
 
-<p>✅ Completadas: <?= $completadas ?></p>
+        </h5>
 
-<p>❌ Canceladas: <?= $canceladas ?></p>
+    </div>
 
-<p>📅 Actividades para hoy: <?= $actividadesHoy ?></p>
+</div>
 
-<hr>
 
-<h3><?= $tituloActividad ?></h3>
+<h3 class="mb-4">📊 Resumen de hoy</h3>
 
-<?php if ($actividadMostrar): ?>
+<div class="row g-4">
 
-    <strong>
-        <?= htmlspecialchars($actividadMostrar['titulo']) ?>
-    </strong>
+    <div class="col-6 col-md-3">
 
-    <br>
+        <div class="card text-center h-100">
 
-    🗓️ <?= $fechaActividad ?>
+            <div class="card-body">
 
-    <br>
+                <h1>📋</h1>
 
-    🕒 <?= $horaInicio ?> - <?= $horaFin ?>
+                <h2><?= $pendientes ?></h2>
 
-    <br>
+                <p class="mb-0">Pendientes</p>
 
-    📍 <?= htmlspecialchars($actividadMostrar['lugar']) ?>
+            </div>
 
-<?php else: ?>
+        </div>
 
-    <p>No tienes actividades programadas.</p>
+    </div>
 
-<?php endif; ?>
+    <div class="col-6 col-md-3">
 
-<hr>
+        <div class="card text-center h-100">
+
+            <div class="card-body">
+
+                <h1>🔄</h1>
+
+                <h2><?= $enProgreso ?></h2>
+
+                <p class="mb-0">En progreso</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-6 col-md-3">
+
+        <div class="card text-center h-100">
+
+            <div class="card-body">
+
+                <h1>✅</h1>
+
+                <h2><?= $completadas ?></h2>
+
+                <p class="mb-0">Completadas</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-6 col-md-3">
+
+        <div class="card text-center h-100">
+
+            <div class="card-body">
+
+                <h1>📅</h1>
+
+                <h2><?= $actividadesHoy ?></h2>
+
+                <p class="mb-0">Actividades</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="card mt-4">
+
+    <div class="card-body">
+
+        <h4 class="mb-4">
+             <?= $tituloActividad ?>
+        </h4>
+
+        <?php if ($actividadMostrar): ?>
+
+            <h3 class="fw-bold">
+
+                <?= htmlspecialchars($actividadMostrar['titulo']) ?>
+
+            </h3>
+
+            <p class="mb-2">
+
+                <i class="bi bi-calendar-event"></i>
+
+                <?= $fechaActividad ?>
+
+            </p>
+
+            <p class="mb-2">
+
+                <i class="bi bi-clock"></i>
+
+                <?= $horaInicio ?> - <?= $horaFin ?>
+
+            </p>
+
+            <p class="mb-0">
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                <?= htmlspecialchars($actividadMostrar['lugar']) ?>
+
+            </p>
+
+        <?php else: ?>
+
+            <div class="text-center py-4">
+
+                <h2>🌴</h2>
+
+                <h5>No tienes actividades programadas</h5>
+
+                <p class="text-muted">
+
+                    Aprovecha para descansar o planear algo nuevo.
+
+                </p>
+
+            </div>
+
+        <?php endif; ?>
+
+    </div>
+
+</div>
+
 
 <a class="btn btn-primary me-2" href="index.php?accion=tareas">
     <i class="bi bi-list-check"></i>
