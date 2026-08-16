@@ -140,21 +140,25 @@ if ($dias == 0) {
             <div class="d-flex justify-content-between">
 
                 <a
-                    href="index.php?accion=editarActividad&id=<?= $actividad['id'] ?>"
+                    href="index.php?accion=editarActividad&id=<?= (int) $actividad['id'] ?>"
                     class="btn btn-outline-primary btn-sm">
 
                     ✏️ Editar
 
                 </a>
 
-                <a
-                    href="index.php?accion=eliminarActividad&id=<?= $actividad['id'] ?>"
-                    class="btn btn-outline-danger btn-sm"
-                    onclick="return confirm('¿Eliminar actividad?')">
+                <!-- FIX: eliminar ahora es un form POST, no un link GET -->
+                <form
+                    action="index.php?accion=eliminarActividad&id=<?= (int) $actividad['id'] ?>"
+                    method="POST"
+                    onsubmit="return confirm('¿Eliminar actividad?')"
+                    style="display:inline;">
 
-                    🗑️ Eliminar
+                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                        🗑️ Eliminar
+                    </button>
 
-                </a>
+                </form>
 
             </div>
 

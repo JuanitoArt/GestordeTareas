@@ -23,7 +23,7 @@ class Actividad
         $actividades = $this->listar();
 
         foreach ($actividades as $actividad) {
-            if ($actividad['id'] == $id) {
+            if ((int) $actividad['id'] === (int) $id) {
                 return $actividad;
             }
         }
@@ -32,26 +32,26 @@ class Actividad
     }
 
     // Crear una actividad
-public function crear($datos)
-{
-    $actividades = $this->listar();
+    public function crear($datos)
+    {
+        $actividades = $this->listar();
 
-    $nuevaActividad = [
-    'id' => JsonManager::siguienteId($actividades),
-    'titulo' => $datos['titulo'],
-    'descripcion' => $datos['descripcion'],
-    'fecha' => $datos['fecha'],
-    'hora_inicio' => $datos['hora_inicio'],
-    'hora_fin' => $datos['hora_fin'],
-    'lugar' => $datos['lugar']
-];
+        $nuevaActividad = [
+            'id' => JsonManager::siguienteId($actividades),
+            'titulo' => $datos['titulo'],
+            'descripcion' => $datos['descripcion'],
+            'fecha' => $datos['fecha'],
+            'hora_inicio' => $datos['hora_inicio'],
+            'hora_fin' => $datos['hora_fin'],
+            'lugar' => $datos['lugar']
+        ];
 
-    $actividades[] = $nuevaActividad;
+        $actividades[] = $nuevaActividad;
 
-    JsonManager::guardar($this->archivo, $actividades);
+        JsonManager::guardar($this->archivo, $actividades);
 
-    return $nuevaActividad;
-}
+        return $nuevaActividad;
+    }
 
     // Eliminar una actividad
     public function eliminar($id)
@@ -60,7 +60,7 @@ public function crear($datos)
 
         foreach ($actividades as $indice => $actividad) {
 
-            if ($actividad['id'] == $id) {
+            if ((int) $actividad['id'] === (int) $id) {
 
                 unset($actividades[$indice]);
 
@@ -77,29 +77,31 @@ public function crear($datos)
 
     // Actualizar una actividad
     public function actualizar($id, $datos)
-{
-    $actividades = $this->listar();
+    {
+        $actividades = $this->listar();
 
-    foreach ($actividades as $indice => $actividad) {
+        foreach ($actividades as $indice => $actividad) {
 
-        if ($actividad['id'] == $id) {
+            if ((int) $actividad['id'] === (int) $id) {
 
-            $actividades[$indice] = [
-                'id' => $id,
-                'titulo' => $datos['titulo'],
-                'descripcion' => $datos['descripcion'],
-                'fecha' => $datos['fecha'],
-                'hora_inicio' => $datos['hora_inicio'],
-                'hora_fin' => $datos['hora_fin'],
-                'lugar' => $datos['lugar']
-            ];
+                $actividades[$indice] = [
+                    // FIX: se casteaba $id (string del formulario) directo, mezclando
+                    // ids como string e int en el mismo archivo JSON.
+                    'id' => (int) $id,
+                    'titulo' => $datos['titulo'],
+                    'descripcion' => $datos['descripcion'],
+                    'fecha' => $datos['fecha'],
+                    'hora_inicio' => $datos['hora_inicio'],
+                    'hora_fin' => $datos['hora_fin'],
+                    'lugar' => $datos['lugar']
+                ];
 
-            JsonManager::guardar($this->archivo, $actividades);
+                JsonManager::guardar($this->archivo, $actividades);
 
-            return true;
+                return true;
+            }
         }
-    }
 
-    return false;
-}
+        return false;
+    }
 }

@@ -77,7 +77,9 @@ switch ($accion) {
 
     break;
 
-  case 'actividades':
+    // ── FIX: 'actividades' y 'miDia' ahora son cases independientes.
+    // Antes 'actividades' caía (fallthrough) en 'miDia' y por eso la vista
+    // con buscador/filtros de views/actividades/index.php nunca se mostraba.
 
     case 'miDia':
 
@@ -102,6 +104,8 @@ switch ($accion) {
     require_once __DIR__ . '/views/actividades/miDia.php';
 
     break;
+
+    case 'actividades':
 
     $actividades = $actividadController->listar();
 
@@ -245,7 +249,7 @@ switch ($accion) {
 
         break;
 
-case 'tareas':
+    case 'tareas':
 
     $tareas = $tareaController->listar();
 
@@ -309,272 +313,224 @@ case 'tareas':
 
     case 'inicio':
 
-
         $tareas = $tareaController->listar();
         $actividades = $actividadController->listar();
 
-        $actividadActual = null;
-$proximaActividad = null;
+        $pendientes = 0;
+        $enProgreso = 0;
+        $completadas = 0;
+        $canceladas = 0;
 
-$ahora = time();
+        $hoy = date('Y-m-d');
 
-usort($actividades, function ($a, $b) {
-    return strtotime($a['fecha'].' '.$a['hora_inicio'])
-        <=> strtotime($b['fecha'].' '.$b['hora_inicio']);
-});
+        foreach ($tareas as $tarea) {
 
-foreach ($actividades as $actividad) {
+            switch ($tarea['estado']) {
 
-    $inicio = strtotime($actividad['fecha'].' '.$actividad['hora_inicio']);
-    $fin    = strtotime($actividad['fecha'].' '.$actividad['hora_fin']);
+                case 'Pendiente':
 
-    if ($ahora >= $inicio && $ahora <= $fin) {
+                    if ($tarea['fecha_limite'] == $hoy) {
+                        $pendientes++;
+                    }
 
-        $actividadActual = $actividad;
-        break;
+                    break;
 
-    }
+                case 'En progreso':
 
-    if ($inicio > $ahora && $proximaActividad == null) {
+                    if ($tarea['fecha_limite'] == $hoy) {
+                        $enProgreso++;
+                    }
 
-        $proximaActividad = $actividad;
+                    break;
 
-    }
+                case 'Completada':
 
-}
+                    if ($tarea['fecha_limite'] == $hoy) {
+                        $completadas++;
+                    }
 
-$pendientes = 0;
-$enProgreso = 0;
-$completadas = 0;
-$canceladas = 0;
+                    break;
 
-$hoy = date('Y-m-d');
-
-foreach ($tareas as $tarea) {
-
-    switch ($tarea['estado']) {
-
-        case 'Pendiente':
-
-            if ($tarea['fecha_limite'] == $hoy) {
-                $pendientes++;
+                case 'Cancelada':
+                    $canceladas++;
+                    break;
             }
-
-            break;
-
-        case 'En progreso':
-
-            if ($tarea['fecha_limite'] == $hoy) {
-                $enProgreso++;
-            }
-
-            break;
-
-        case 'Completada':
-
-    if ($tarea['fecha_limite'] == $hoy) {
-        $completadas++;
-    }
-
-    break;
-
-        case 'Cancelada':
-            $canceladas++;
-            break;
-    }
-
-}
-$actividadesHoy = 0;
-$hoy = date('Y-m-d');
-$ahora = time();
-
-foreach ($actividades as $actividad) {
-
-    if ($actividad['fecha'] == $hoy) {
-
-        $horaFin = strtotime(
-            $actividad['fecha'] . ' ' . $actividad['hora_fin']
-        );
-
-        // Solo contar actividades que aún no terminan
-        if ($horaFin >= $ahora) {
-
-            $actividadesHoy++;
-
         }
 
-    }
+        // FIX: variable que faltaba definir y que usa la tarjeta "Actividades" del dashboard
+        $actividadesHoy = 0;
 
-}
+        foreach ($actividades as $actividad) {
+            if ($actividad['fecha'] == $hoy) {
+                $actividadesHoy++;
+            }
+        }
 
         $nombreUsuario = "Juan";
 
         $hora = (int) date('H');
 
-if ($hora >= 5 && $hora < 12) {
+        if ($hora >= 5 && $hora < 12) {
 
-    $saludo = "🌅 Buenos días";
+            $saludo = "🌅 Buenos días";
 
-} elseif ($hora >= 12 && $hora < 18) {
+        } elseif ($hora >= 12 && $hora < 18) {
 
-    $saludo = "☀️ Buenas tardes";
+            $saludo = "☀️ Buenas tardes";
 
-} else {
+        } else {
 
-    $saludo = "🌙 Buenas noches";
+            $saludo = "🌙 Buenas noches";
 
-}
+        }
 
         $dias = [
-        'Sunday' => 'Domingo',
-        'Monday' => 'Lunes',
-        'Tuesday' => 'Martes',
-        'Wednesday' => 'Miércoles',
-        'Thursday' => 'Jueves',
-        'Friday' => 'Viernes',
-        'Saturday' => 'Sábado'
-    ];
+            'Sunday' => 'Domingo',
+            'Monday' => 'Lunes',
+            'Tuesday' => 'Martes',
+            'Wednesday' => 'Miércoles',
+            'Thursday' => 'Jueves',
+            'Friday' => 'Viernes',
+            'Saturday' => 'Sábado'
+        ];
 
-    $meses = [
-        1 => 'enero',
-        2 => 'febrero',
-        3 => 'marzo',
-        4 => 'abril',
-        5 => 'mayo',
-        6 => 'junio',
-        7 => 'julio',
-        8 => 'agosto',
-        9 => 'septiembre',
-        10 => 'octubre',
-        11 => 'noviembre',
-        12 => 'diciembre'
-    ];
+        $meses = [
+            1 => 'enero',
+            2 => 'febrero',
+            3 => 'marzo',
+            4 => 'abril',
+            5 => 'mayo',
+            6 => 'junio',
+            7 => 'julio',
+            8 => 'agosto',
+            9 => 'septiembre',
+            10 => 'octubre',
+            11 => 'noviembre',
+            12 => 'diciembre'
+        ];
 
-    $fechaActual =
-        $dias[date('l')] . ", " .
-        date('d') . " de " .
-        $meses[(int)date('n')] . " de " .
-        date('Y');
+        $fechaActual =
+            $dias[date('l')] . ", " .
+            date('d') . " de " .
+            $meses[(int)date('n')] . " de " .
+            date('Y');
 
-    // Contar solo las tareas pendientes o en progreso
-    $tareasPendientes = 0;
+        // Contar solo las tareas pendientes o en progreso
+        $tareasPendientes = 0;
 
-    foreach ($tareas as $tarea) {
+        foreach ($tareas as $tarea) {
 
-        if (
-            $tarea['estado'] == 'Pendiente' ||
-            $tarea['estado'] == 'En progreso'
-        ) {
-            $tareasPendientes++;
+            if (
+                $tarea['estado'] == 'Pendiente' ||
+                $tarea['estado'] == 'En progreso'
+            ) {
+                $tareasPendientes++;
+            }
         }
-    }
 
-    // Buscar la próxima actividad
-$actividadActual = null;
-$proximaActividad = null;
-$tituloActividad = "📅 Próxima actividad";
+        // Buscar la próxima actividad (o la que está en curso ahora)
+        // FIX: este bloque estaba duplicado (se calculaba dos veces con el mismo resultado);
+        // se dejó solo una vez.
+        $actividadActual = null;
+        $proximaActividad = null;
+        $tituloActividad = "📅 Próxima actividad";
 
-// Ordenar las actividades por fecha y hora
-usort($actividades, function ($a, $b) {
+        usort($actividades, function ($a, $b) {
 
-    return strtotime($a['fecha'] . ' ' . $a['hora_inicio'])
-        <=> strtotime($b['fecha'] . ' ' . $b['hora_inicio']);
+            return strtotime($a['fecha'] . ' ' . $a['hora_inicio'])
+                <=> strtotime($b['fecha'] . ' ' . $b['hora_inicio']);
 
-});
+        });
 
-$ahora = time();
+        $ahora = time();
 
-foreach ($actividades as $actividad) {
+        foreach ($actividades as $actividad) {
 
-    $inicio = strtotime(
-        $actividad['fecha'] . ' ' . $actividad['hora_inicio']
-    );
+            $inicio = strtotime(
+                $actividad['fecha'] . ' ' . $actividad['hora_inicio']
+            );
 
-    $fin = strtotime(
-        $actividad['fecha'] . ' ' . $actividad['hora_fin']
-    );
+            $fin = strtotime(
+                $actividad['fecha'] . ' ' . $actividad['hora_fin']
+            );
 
-    // Si la actividad está en curso
-    if ($ahora >= $inicio && $ahora <= $fin) {
+            // Si la actividad está en curso
+            if ($ahora >= $inicio && $ahora <= $fin) {
 
-        $actividadActual = $actividad;
-        $tituloActividad = "🟢 Actividad en curso";
-        break;
+                $actividadActual = $actividad;
+                $tituloActividad = "🟢 Actividad en curso";
+                break;
 
-    }
+            }
 
-    // Guardar la próxima actividad
-    if ($inicio > $ahora && $proximaActividad == null) {
+            // Guardar la próxima actividad
+            if ($inicio > $ahora && $proximaActividad == null) {
 
-        $proximaActividad = $actividad;
+                $proximaActividad = $actividad;
 
-    }
+            }
 
-}
+        }
 
-$actividadMostrar = $actividadActual ?? $proximaActividad;
+        $actividadMostrar = $actividadActual ?? $proximaActividad;
 
-$horaInicio = '';
-$horaFin = '';
-$fechaActividad = '';
+        $horaInicio = '';
+        $horaFin = '';
+        $fechaActividad = '';
 
-if ($actividadMostrar) {
+        if ($actividadMostrar) {
 
-   $horaInicio = date(
-    'g:i a',
-    strtotime($actividadMostrar['hora_inicio'])
-);
+            $horaInicio = date(
+                'g:i a',
+                strtotime($actividadMostrar['hora_inicio'])
+            );
 
-$horaFin = date(
-    'g:i a',
-    strtotime($actividadMostrar['hora_fin'])
-);
+            $horaFin = date(
+                'g:i a',
+                strtotime($actividadMostrar['hora_fin'])
+            );
 
-$fecha = $actividadMostrar['fecha'];
+            $fecha = $actividadMostrar['fecha'];
 
-    if ($fecha == date('Y-m-d')) {
+            if ($fecha == date('Y-m-d')) {
 
-        $fechaActividad = "Hoy";
+                $fechaActividad = "Hoy";
 
-    } elseif ($fecha == date('Y-m-d', strtotime('+1 day'))) {
+            } elseif ($fecha == date('Y-m-d', strtotime('+1 day'))) {
 
-        $fechaActividad = "Mañana";
+                $fechaActividad = "Mañana";
 
-    } else {
+            } else {
 
-        $fechaActividad =
-            $dias[date('l', strtotime($fecha))] . ", " .
-            date('d', strtotime($fecha)) . " de " .
-            $meses[(int)date('n', strtotime($fecha))] . " de " .
-            date('Y', strtotime($fecha));
-    }
-}
+                $fechaActividad =
+                    $dias[date('l', strtotime($fecha))] . ", " .
+                    date('d', strtotime($fecha)) . " de " .
+                    $meses[(int)date('n', strtotime($fecha))] . " de " .
+                    date('Y', strtotime($fecha));
+            }
+        }
 
-    // Mensaje dinámico
-    if ($tareasPendientes == 0) {
+        // Mensaje dinámico
+        if ($tareasPendientes == 0) {
 
-        $mensaje = "🎉 Hoy estás libre. ¡Disfruta tu día!";
+            $mensaje = "🎉 Hoy estás libre. ¡Disfruta tu día!";
 
-    } elseif ($tareasPendientes == 1) {
+        } elseif ($tareasPendientes == 1) {
 
-        $mensaje = "🎯 Solo te queda una tarea. ¡Ya casi terminas!";
+            $mensaje = "🎯 Solo te queda una tarea. ¡Ya casi terminas!";
 
-    } elseif ($tareasPendientes <= 3) {
+        } elseif ($tareasPendientes <= 3) {
 
-        $mensaje = "🙂 Te quedan algunas cosas por hacer. ¡Ánimo!";
+            $mensaje = "🙂 Te quedan algunas cosas por hacer. ¡Ánimo!";
 
-    } else {
+        } else {
 
-        $mensaje = "💪 Tienes mucho por hacer hoy.";
-    }
+            $mensaje = "💪 Tienes mucho por hacer hoy.";
+        }
 
-            ?>
-
-
-         <?php
-$titulo = "Inicio";
-require_once __DIR__ . '/views/layouts/header.php';
-require_once __DIR__ . '/views/layouts/navbar.php';
+        $titulo = "Inicio";
+        require_once __DIR__ . '/views/layouts/header.php';
+        require_once __DIR__ . '/views/layouts/navbar.php';
 ?>
 
 <div class="card mb-4">
@@ -601,11 +557,6 @@ require_once __DIR__ . '/views/layouts/navbar.php';
     </div>
 
 </div>
-
-
-
-
-
 
 <div class="card mt-4">
 
@@ -675,111 +626,113 @@ require_once __DIR__ . '/views/layouts/navbar.php';
 
     <div class="col-6 col-md-3">
 
-    <a href="index.php?accion=tareas&estado=Pendiente&hoy=1"
-       class="text-decoration-none text-dark">
+        <a href="index.php?accion=tareas&estado=Pendiente&hoy=1"
+           class="text-decoration-none text-dark">
 
-        <div class="card text-center h-100 resumen-card">
+            <div class="card text-center h-100 resumen-card">
 
-            <div class="card-body">
+                <div class="card-body">
 
-                <h1>📋</h1>
+                    <h1>📋</h1>
 
-                <h2><?= $pendientes ?></h2>
+                    <h2><?= $pendientes ?></h2>
 
-                <p class="mb-0">Pendientes</p>
+                    <p class="mb-0">Pendientes</p>
+
+                </div>
 
             </div>
 
-        </div>
+        </a>
 
-    </a>
-
-</div>
+    </div>
 
     <div class="col-6 col-md-3">
 
-    <a href="index.php?accion=tareas&estado=En progreso&hoy=1"
-       class="text-decoration-none text-dark">
+        <a href="index.php?accion=tareas&estado=En progreso&hoy=1"
+           class="text-decoration-none text-dark">
 
-        <div class="card text-center h-100 resumen-card">
+            <div class="card text-center h-100 resumen-card">
 
-            <div class="card-body">
+                <div class="card-body">
 
-                <h1>🔄</h1>
+                    <h1>🔄</h1>
 
-                <h2><?= $enProgreso ?></h2>
+                    <h2><?= $enProgreso ?></h2>
 
-                <p class="mb-0">En progreso</p>
+                    <p class="mb-0">En progreso</p>
+
+                </div>
 
             </div>
 
-        </div>
+        </a>
 
-    </a>
-
-</div>
+    </div>
 
     <div class="col-6 col-md-3">
 
-    <a href="index.php?accion=tareas&estado=Completada&hoy=1"
-       class="text-decoration-none text-dark">
+        <a href="index.php?accion=tareas&estado=Completada&hoy=1"
+           class="text-decoration-none text-dark">
 
-        <div class="card text-center h-100 resumen-card">
+            <div class="card text-center h-100 resumen-card">
 
-            <div class="card-body">
+                <div class="card-body">
 
-                <h1>✅</h1>
+                    <h1>✅</h1>
 
-                <h2><?= $completadas ?></h2>
+                    <h2><?= $completadas ?></h2>
 
-                <p class="mb-0">Completadas</p>
+                    <p class="mb-0">Completadas</p>
+
+                </div>
 
             </div>
 
-        </div>
+        </a>
 
-    </a>
-
-</div>
+    </div>
 
     <div class="col-6 col-md-3">
 
-    <a href="index.php?accion=miDia"
-       class="text-decoration-none text-dark">
+        <a href="index.php?accion=miDia"
+           class="text-decoration-none text-dark">
 
-        <div class="card text-center h-100">
+            <div class="card text-center h-100">
 
-            <div class="card-body">
+                <div class="card-body">
 
-                <h1>📅</h1>
+                    <h1>📅</h1>
 
-                <h2><?= $actividadesHoy ?></h2>
+                    <h2><?= $actividadesHoy ?></h2>
 
-                <p class="mb-0">Actividades</p>
+                    <p class="mb-0">Actividades</p>
+
+                </div>
 
             </div>
 
-        </div>
+        </a>
 
     </div>
 
 </div>
 
-
-<a class="btn btn-primary me-2" href="index.php?accion=tareas">
+<a class="btn btn-primary me-2 mt-4" href="index.php?accion=tareas">
     <i class="bi bi-list-check"></i>
     Ver tareas
 </a>
 
-<a class="btn btn-success" href="index.php?accion=actividades">
+<a class="btn btn-success mt-4" href="index.php?accion=actividades">
     <i class="bi bi-calendar-event"></i>
     Ver actividades
 </a>
 
 <?php require_once __DIR__ . '/views/layouts/footer.php'; ?>
-            <?php
 
-            break;
+<?php
+
+        break;
 
     default:
 

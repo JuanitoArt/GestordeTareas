@@ -37,6 +37,14 @@
         "descripcion": "Lavar loza y hacer oficio en la casa",
         "prioridad": "Media",
         "fecha_limite": "2026-08-04",
-        "estado": "Pendiente"
+        "estado": "Completada"
+    },
+    {
+        "id": 7,
+        "titulo": "Lavar loza",
+        "descripcion": "Lavar loza",
+        "prioridad": "Media",
+        "fecha_limite": "2026-08-04",
+        "estado": "Completada"
     }
 ]

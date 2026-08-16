@@ -11,7 +11,7 @@ require_once __DIR__ . '/../layouts/navbar.php';
 
 <h1>✏️ Editar actividad</h1>
 
-<form action="index.php?accion=actualizarActividad&id=<?= $actividad['id'] ?>" method="POST">
+<form action="index.php?accion=actualizarActividad&id=<?= (int) $actividad['id'] ?>" method="POST">
 
     <label for="titulo">
         Título:
@@ -54,7 +54,7 @@ require_once __DIR__ . '/../layouts/navbar.php';
         type="date"
         id="fecha"
         name="fecha"
-        value="<?= $actividad['fecha'] ?>"
+        value="<?= htmlspecialchars($actividad['fecha']) ?>"
         required
     >
 
@@ -70,7 +70,7 @@ require_once __DIR__ . '/../layouts/navbar.php';
         type="time"
         id="hora_inicio"
         name="hora_inicio"
-        value="<?= $actividad['hora_inicio'] ?>"
+        value="<?= htmlspecialchars($actividad['hora_inicio']) ?>"
         required
     >
 
@@ -86,7 +86,7 @@ require_once __DIR__ . '/../layouts/navbar.php';
         type="time"
         id="hora_fin"
         name="hora_fin"
-        value="<?= $actividad['hora_fin'] ?>"
+        value="<?= htmlspecialchars($actividad['hora_fin']) ?>"
         required
     >
 

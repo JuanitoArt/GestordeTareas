@@ -268,21 +268,26 @@ if (
          <div class="d-flex justify-content-between">
 
     <a
-        href="index.php?accion=editarTarea&id=<?= $tarea['id'] ?>"
+        href="index.php?accion=editarTarea&id=<?= (int) $tarea['id'] ?>"
         class="btn btn-outline-primary btn-sm">
 
         ✏️ Editar
 
     </a>
 
-    <a
-        href="index.php?accion=eliminarTarea&id=<?= $tarea['id'] ?>"
-        class="btn btn-outline-danger btn-sm"
-        onclick="return confirm('¿Seguro que deseas eliminar esta tarea?')">
+    <!-- FIX: eliminar ahora es un form POST, no un link GET (evita CSRF y que
+         crawlers/bots borren datos solo por visitar el link) -->
+    <form
+        action="index.php?accion=eliminarTarea&id=<?= (int) $tarea['id'] ?>"
+        method="POST"
+        onsubmit="return confirm('¿Seguro que deseas eliminar esta tarea?')"
+        style="display:inline;">
 
-        🗑️ Eliminar
+        <button type="submit" class="btn btn-outline-danger btn-sm">
+            🗑️ Eliminar
+        </button>
 
-    </a>
+    </form>
 </div>
 
 </div>

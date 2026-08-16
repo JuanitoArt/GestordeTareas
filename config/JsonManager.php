@@ -19,13 +19,24 @@ class JsonManager
 
     public static function guardar($archivo, $datos)
     {
-        file_put_contents(
+        // FIX: LOCK_EX evita que dos escrituras simultáneas corrompan el archivo
+        // o se pisen entre sí.
+        $resultado = file_put_contents(
             $archivo,
             json_encode(
                 $datos,
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-            )
+            ),
+            LOCK_EX
         );
+
+        // FIX: antes un fallo al escribir (permisos, disco lleno, etc.)
+        // pasaba completamente desapercibido.
+        if ($resultado === false) {
+            throw new RuntimeException("No se pudo guardar el archivo: {$archivo}");
+        }
+
+        return true;
     }
 
     public static function siguienteId($datos)
@@ -34,7 +45,7 @@ class JsonManager
             return 1;
         }
 
-        $ids = array_column($datos, 'id');
+        $ids = array_map('intval', array_column($datos, 'id'));
 
         return max($ids) + 1;
     }

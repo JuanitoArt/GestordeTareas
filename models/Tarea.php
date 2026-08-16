@@ -23,7 +23,7 @@ class Tarea
         $tareas = $this->listar();
 
         foreach ($tareas as $tarea) {
-            if ($tarea['id'] == $id) {
+            if ((int) $tarea['id'] === (int) $id) {
                 return $tarea;
             }
         }
@@ -59,7 +59,7 @@ class Tarea
 
         foreach ($tareas as $indice => $tarea) {
 
-            if ($tarea['id'] == $id) {
+            if ((int) $tarea['id'] === (int) $id) {
 
                 $tareas[$indice]['titulo'] = $datos['titulo'];
                 $tareas[$indice]['descripcion'] = $datos['descripcion'];
@@ -83,7 +83,7 @@ class Tarea
 
         foreach ($tareas as $indice => $tarea) {
 
-            if ($tarea['id'] == $id) {
+            if ((int) $tarea['id'] === (int) $id) {
 
                 unset($tareas[$indice]);
 

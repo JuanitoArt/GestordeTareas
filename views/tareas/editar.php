@@ -11,7 +11,7 @@ require_once __DIR__ . '/../layouts/navbar.php';
 
 <h1>✏️ Editar tarea</h1>
 
-<form action="index.php?accion=actualizarTarea&id=<?= $tarea['id'] ?>" method="POST">
+<form action="index.php?accion=actualizarTarea&id=<?= (int) $tarea['id'] ?>" method="POST">
 
     <label for="titulo">Título:</label><br>
 
@@ -65,7 +65,7 @@ require_once __DIR__ . '/../layouts/navbar.php';
         type="date"
         id="fecha_limite"
         name="fecha_limite"
-        value="<?= $tarea['fecha_limite'] ?>"
+        value="<?= htmlspecialchars($tarea['fecha_limite']) ?>"
         required
     >
 
