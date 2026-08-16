@@ -1,107 +1,85 @@
 <?php
 
-require_once __DIR__ . '/../config/JsonManager.php';
+require_once __DIR__ . '/../config/Database.php';
 
 class Actividad
 {
-    private $archivo;
+    private PDO $db;
 
     public function __construct()
     {
-        $this->archivo = __DIR__ . '/../database/actividades.json';
+        $this->db = Database::getConexion();
     }
 
     // Obtener todas las actividades
     public function listar()
     {
-        return JsonManager::leer($this->archivo);
+        $stmt = $this->db->query("SELECT * FROM actividades ORDER BY fecha, hora_inicio");
+
+        return $stmt->fetchAll();
     }
 
     // Buscar una actividad por ID
     public function buscarPorId($id)
     {
-        $actividades = $this->listar();
+        $stmt = $this->db->prepare("SELECT * FROM actividades WHERE id = :id");
+        $stmt->execute(['id' => (int) $id]);
 
-        foreach ($actividades as $actividad) {
-            if ((int) $actividad['id'] === (int) $id) {
-                return $actividad;
-            }
-        }
+        $actividad = $stmt->fetch();
 
-        return null;
+        return $actividad ?: null;
     }
 
     // Crear una actividad
     public function crear($datos)
     {
-        $actividades = $this->listar();
+        $stmt = $this->db->prepare(
+            "INSERT INTO actividades (titulo, descripcion, fecha, hora_inicio, hora_fin, lugar)
+             VALUES (:titulo, :descripcion, :fecha, :hora_inicio, :hora_fin, :lugar)"
+        );
 
-        $nuevaActividad = [
-            'id' => JsonManager::siguienteId($actividades),
+        $stmt->execute([
             'titulo' => $datos['titulo'],
             'descripcion' => $datos['descripcion'],
             'fecha' => $datos['fecha'],
             'hora_inicio' => $datos['hora_inicio'],
             'hora_fin' => $datos['hora_fin'],
-            'lugar' => $datos['lugar']
-        ];
+            'lugar' => $datos['lugar'],
+        ]);
 
-        $actividades[] = $nuevaActividad;
-
-        JsonManager::guardar($this->archivo, $actividades);
-
-        return $nuevaActividad;
+        return $this->buscarPorId($this->db->lastInsertId());
     }
 
     // Eliminar una actividad
     public function eliminar($id)
     {
-        $actividades = $this->listar();
+        $stmt = $this->db->prepare("DELETE FROM actividades WHERE id = :id");
 
-        foreach ($actividades as $indice => $actividad) {
-
-            if ((int) $actividad['id'] === (int) $id) {
-
-                unset($actividades[$indice]);
-
-                $actividades = array_values($actividades);
-
-                JsonManager::guardar($this->archivo, $actividades);
-
-                return true;
-            }
-        }
-
-        return false;
+        return $stmt->execute(['id' => (int) $id]);
     }
 
     // Actualizar una actividad
     public function actualizar($id, $datos)
     {
-        $actividades = $this->listar();
+        $stmt = $this->db->prepare(
+            "UPDATE actividades
+             SET titulo = :titulo,
+                 descripcion = :descripcion,
+                 fecha = :fecha,
+                 hora_inicio = :hora_inicio,
+                 hora_fin = :hora_fin,
+                 lugar = :lugar
+             WHERE id = :id"
+        );
 
-        foreach ($actividades as $indice => $actividad) {
-
-            if ((int) $actividad['id'] === (int) $id) {
-
-                $actividades[$indice] = [
-                    // FIX: se casteaba $id (string del formulario) directo, mezclando
-                    // ids como string e int en el mismo archivo JSON.
-                    'id' => (int) $id,
-                    'titulo' => $datos['titulo'],
-                    'descripcion' => $datos['descripcion'],
-                    'fecha' => $datos['fecha'],
-                    'hora_inicio' => $datos['hora_inicio'],
-                    'hora_fin' => $datos['hora_fin'],
-                    'lugar' => $datos['lugar']
-                ];
-
-                JsonManager::guardar($this->archivo, $actividades);
-
-                return true;
-            }
-        }
-
-        return false;
+        return $stmt->execute([
+            'titulo' => $datos['titulo'],
+            'descripcion' => $datos['descripcion'],
+            'fecha' => $datos['fecha'],
+            'hora_inicio' => $datos['hora_inicio'],
+            'hora_fin' => $datos['hora_fin'],
+            'lugar' => $datos['lugar'],
+            'id' => (int) $id,
+        ]);
     }
 }

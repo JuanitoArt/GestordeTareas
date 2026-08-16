@@ -1,100 +1,82 @@
 <?php
 
-require_once __DIR__ . '/../config/JsonManager.php';
+require_once __DIR__ . '/../config/Database.php';
 
 class Tarea
 {
-    private $archivo;
+    private PDO $db;
 
     public function __construct()
     {
-        $this->archivo = __DIR__ . '/../database/tareas.json';
+        $this->db = Database::getConexion();
     }
 
     // Obtener todas las tareas
     public function listar()
     {
-        return JsonManager::leer($this->archivo);
+        $stmt = $this->db->query("SELECT * FROM tareas ORDER BY id DESC");
+
+        return $stmt->fetchAll();
     }
 
     // Buscar una tarea por ID
     public function buscarPorId($id)
     {
-        $tareas = $this->listar();
+        $stmt = $this->db->prepare("SELECT * FROM tareas WHERE id = :id");
+        $stmt->execute(['id' => (int) $id]);
 
-        foreach ($tareas as $tarea) {
-            if ((int) $tarea['id'] === (int) $id) {
-                return $tarea;
-            }
-        }
+        $tarea = $stmt->fetch();
 
-        return null;
+        return $tarea ?: null;
     }
 
     // Crear una tarea
     public function crear($datos)
     {
-        $tareas = $this->listar();
+        $stmt = $this->db->prepare(
+            "INSERT INTO tareas (titulo, descripcion, prioridad, fecha_limite, estado)
+             VALUES (:titulo, :descripcion, :prioridad, :fecha_limite, :estado)"
+        );
 
-        $nuevaTarea = [
-            'id' => JsonManager::siguienteId($tareas),
+        $stmt->execute([
             'titulo' => $datos['titulo'],
             'descripcion' => $datos['descripcion'],
             'prioridad' => $datos['prioridad'],
             'fecha_limite' => $datos['fecha_limite'],
-            'estado' => 'Pendiente'
-        ];
+            'estado' => 'Pendiente',
+        ]);
 
-        $tareas[] = $nuevaTarea;
-
-        JsonManager::guardar($this->archivo, $tareas);
-
-        return $nuevaTarea;
+        return $this->buscarPorId($this->db->lastInsertId());
     }
 
     // Editar una tarea
     public function actualizar($id, $datos)
     {
-        $tareas = $this->listar();
+        $stmt = $this->db->prepare(
+            "UPDATE tareas
+             SET titulo = :titulo,
+                 descripcion = :descripcion,
+                 prioridad = :prioridad,
+                 fecha_limite = :fecha_limite,
+                 estado = :estado
+             WHERE id = :id"
+        );
 
-        foreach ($tareas as $indice => $tarea) {
-
-            if ((int) $tarea['id'] === (int) $id) {
-
-                $tareas[$indice]['titulo'] = $datos['titulo'];
-                $tareas[$indice]['descripcion'] = $datos['descripcion'];
-                $tareas[$indice]['prioridad'] = $datos['prioridad'];
-                $tareas[$indice]['fecha_limite'] = $datos['fecha_limite'];
-                $tareas[$indice]['estado'] = $datos['estado'];
-
-                JsonManager::guardar($this->archivo, $tareas);
-
-                return true;
-            }
-        }
-
-        return false;
+        return $stmt->execute([
+            'titulo' => $datos['titulo'],
+            'descripcion' => $datos['descripcion'],
+            'prioridad' => $datos['prioridad'],
+            'fecha_limite' => $datos['fecha_limite'],
+            'estado' => $datos['estado'],
+            'id' => (int) $id,
+        ]);
     }
 
     // Eliminar una tarea
     public function eliminar($id)
     {
-        $tareas = $this->listar();
+        $stmt = $this->db->prepare("DELETE FROM tareas WHERE id = :id");
 
-        foreach ($tareas as $indice => $tarea) {
-
-            if ((int) $tarea['id'] === (int) $id) {
-
-                unset($tareas[$indice]);
-
-                $tareas = array_values($tareas);
-
-                JsonManager::guardar($this->archivo, $tareas);
-
-                return true;
-            }
-        }
-
-        return false;
+        return $stmt->execute(['id' => (int) $id]);
     }
 }

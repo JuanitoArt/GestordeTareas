@@ -8,14 +8,6 @@
         "estado": "Completada"
     },
     {
-        "id": 3,
-        "titulo": "Sena",
-        "descripcion": "Ir al mercado campesino",
-        "prioridad": "Media",
-        "fecha_limite": "2026-07-31",
-        "estado": "Completada"
-    },
-    {
         "id": 4,
         "titulo": "Comer",
         "descripcion": "cenar en la noche",
