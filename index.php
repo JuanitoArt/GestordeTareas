@@ -1,15 +1,95 @@
 <?php
 
+session_start();
+
 require_once __DIR__ . '/config/zonahoraria.php';
 require_once __DIR__ . '/controllers/TareaController.php';
 require_once __DIR__ . '/controllers/ActividadController.php';
+require_once __DIR__ . '/controllers/AuthController.php';
 
 $tareaController = new TareaController();
 $actividadController = new ActividadController();
+$authController = new AuthController();
 
 $accion = $_GET['accion'] ?? 'inicio';
 
+// Rutas que cualquiera puede visitar sin haber iniciado sesión
+$accionesPublicas = ['login', 'registro', 'procesarLogin', 'procesarRegistro'];
+
+if (!isset($_SESSION['usuario_id']) && !in_array($accion, $accionesPublicas)) {
+    header('Location: index.php?accion=login');
+    exit;
+}
+
+// Si ya inició sesión, no tiene sentido que vuelva a ver login/registro
+if (isset($_SESSION['usuario_id']) && in_array($accion, $accionesPublicas)) {
+    header('Location: index.php?accion=inicio');
+    exit;
+}
+
+$usuarioId = $_SESSION['usuario_id'] ?? null;
+
 switch ($accion) {
+
+    case 'login':
+
+        $error = null;
+        $mensaje = $_GET['mensaje'] ?? null;
+
+        require_once __DIR__ . '/views/auth/login.php';
+
+        break;
+
+    case 'procesarLogin':
+
+        $resultado = $authController->iniciarSesion(
+            $_POST['identificador'] ?? '',
+            $_POST['password'] ?? ''
+        );
+
+        if ($resultado['exito']) {
+            header('Location: index.php?accion=inicio');
+            exit;
+        }
+
+        $error = $resultado['error'];
+        $mensaje = null;
+
+        require_once __DIR__ . '/views/auth/login.php';
+
+        break;
+
+    case 'registro':
+
+        $error = null;
+
+        require_once __DIR__ . '/views/auth/registro.php';
+
+        break;
+
+    case 'procesarRegistro':
+
+        $resultado = $authController->registrar($_POST);
+
+        if ($resultado['exito']) {
+            header('Location: index.php?accion=login&mensaje=' . urlencode('Cuenta creada. Ya puedes iniciar sesión.'));
+            exit;
+        }
+
+        $error = $resultado['error'];
+
+        require_once __DIR__ . '/views/auth/registro.php';
+
+        break;
+
+    case 'logout':
+
+        $authController->cerrarSesion();
+
+        header('Location: index.php?accion=login');
+        exit;
+
+        break;
 
     case 'actualizarActividad':
 
@@ -24,7 +104,7 @@ switch ($accion) {
         'lugar' => $_POST['lugar'] ?? ''
     ];
 
-    $actividadController->actualizar($id, $datos);
+    $actividadController->actualizar($id, $datos, $usuarioId);
 
     header('Location: index.php?accion=actividades');
     exit;
@@ -36,7 +116,7 @@ switch ($accion) {
 
     $id = $_GET['id'];
 
-    $actividadController->eliminar($id);
+    $actividadController->eliminar($id, $usuarioId);
 
     header('Location: index.php?accion=actividades');
     exit;
@@ -47,7 +127,7 @@ switch ($accion) {
 
     $id = $_GET['id'];
 
-    $actividad = $actividadController->buscarPorId($id);
+    $actividad = $actividadController->buscarPorId($id, $usuarioId);
 
     require_once __DIR__ . '/views/actividades/editar.php';
 
@@ -64,7 +144,7 @@ switch ($accion) {
     'lugar' => $_POST['lugar'] ?? ''
 ];
 
-    $resultado = $actividadController->crear($datos);
+    $resultado = $actividadController->crear($datos, $usuarioId);
 
     header('Location: index.php?accion=actividades');
     exit;
@@ -83,7 +163,7 @@ switch ($accion) {
 
     case 'miDia':
 
-    $actividades = $actividadController->listar();
+    $actividades = $actividadController->listar($usuarioId);
 
     $hoy = date('Y-m-d');
 
@@ -107,7 +187,7 @@ switch ($accion) {
 
     case 'actividades':
 
-    $actividades = $actividadController->listar();
+    $actividades = $actividadController->listar($usuarioId);
 
     // Buscar por texto
     if (!empty($_GET['buscar'])) {
@@ -190,7 +270,7 @@ switch ($accion) {
 
     $id = $_GET['id'];
 
-    $tareaController->eliminar($id);
+    $tareaController->eliminar($id, $usuarioId);
 
     header('Location: index.php?accion=tareas');
     exit;
@@ -209,7 +289,7 @@ switch ($accion) {
         'estado' => $_POST['estado'] ?? ''
     ];
 
-    $resultado = $tareaController->actualizar($id, $datos);
+    $resultado = $tareaController->actualizar($id, $datos, $usuarioId);
 
     header('Location: index.php?accion=tareas');
     exit;
@@ -220,7 +300,7 @@ switch ($accion) {
 
     $id = $_GET['id'];
 
-    $tarea = $tareaController->buscarPorId($id);
+    $tarea = $tareaController->buscarPorId($id, $usuarioId);
 
     require_once __DIR__ . '/views/tareas/editar.php';
 
@@ -236,7 +316,7 @@ switch ($accion) {
     'estado' => $_POST['estado'] ?? 'Pendiente'
 ];
 
-        $resultado = $tareaController->crear($datos);
+        $resultado = $tareaController->crear($datos, $usuarioId);
 
         header('Location: index.php?accion=tareas');
         exit;
@@ -251,7 +331,7 @@ switch ($accion) {
 
     case 'tareas':
 
-    $tareas = $tareaController->listar();
+    $tareas = $tareaController->listar($usuarioId);
 
     // Buscar por texto
     if (!empty($_GET['buscar'])) {
@@ -313,8 +393,8 @@ switch ($accion) {
 
     case 'inicio':
 
-        $tareas = $tareaController->listar();
-        $actividades = $actividadController->listar();
+        $tareas = $tareaController->listar($usuarioId);
+        $actividades = $actividadController->listar($usuarioId);
 
         $pendientes = 0;
         $enProgreso = 0;
@@ -366,7 +446,7 @@ switch ($accion) {
             }
         }
 
-        $nombreUsuario = "Juan";
+        $nombreUsuario = $_SESSION['nombre_usuario'] ?? 'Usuario';
 
         $hora = (int) date('H');
 

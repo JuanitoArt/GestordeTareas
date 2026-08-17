@@ -11,31 +11,41 @@ class Actividad
         $this->db = Database::getConexion();
     }
 
-    // Obtener todas las actividades
-    public function listar()
+    // Obtener todas las actividades DE UN USUARIO
+    public function listar($usuarioId)
     {
-        $stmt = $this->db->query("SELECT * FROM actividades ORDER BY fecha, hora_inicio");
+        $stmt = $this->db->prepare(
+            "SELECT * FROM actividades WHERE usuario_id = :usuario_id ORDER BY fecha, hora_inicio"
+        );
+
+        $stmt->execute(['usuario_id' => (int) $usuarioId]);
 
         return $stmt->fetchAll();
     }
 
-    // Buscar una actividad por ID
-    public function buscarPorId($id)
+    // Buscar una actividad por ID, verificando que pertenezca al usuario
+    public function buscarPorId($id, $usuarioId)
     {
-        $stmt = $this->db->prepare("SELECT * FROM actividades WHERE id = :id");
-        $stmt->execute(['id' => (int) $id]);
+        $stmt = $this->db->prepare(
+            "SELECT * FROM actividades WHERE id = :id AND usuario_id = :usuario_id"
+        );
+
+        $stmt->execute([
+            'id' => (int) $id,
+            'usuario_id' => (int) $usuarioId,
+        ]);
 
         $actividad = $stmt->fetch();
 
         return $actividad ?: null;
     }
 
-    // Crear una actividad
-    public function crear($datos)
+    // Crear una actividad para un usuario
+    public function crear($datos, $usuarioId)
     {
         $stmt = $this->db->prepare(
-            "INSERT INTO actividades (titulo, descripcion, fecha, hora_inicio, hora_fin, lugar)
-             VALUES (:titulo, :descripcion, :fecha, :hora_inicio, :hora_fin, :lugar)"
+            "INSERT INTO actividades (titulo, descripcion, fecha, hora_inicio, hora_fin, lugar, usuario_id)
+             VALUES (:titulo, :descripcion, :fecha, :hora_inicio, :hora_fin, :lugar, :usuario_id)"
         );
 
         $stmt->execute([
@@ -45,21 +55,27 @@ class Actividad
             'hora_inicio' => $datos['hora_inicio'],
             'hora_fin' => $datos['hora_fin'],
             'lugar' => $datos['lugar'],
+            'usuario_id' => (int) $usuarioId,
         ]);
 
-        return $this->buscarPorId($this->db->lastInsertId());
+        return $this->buscarPorId($this->db->lastInsertId(), $usuarioId);
     }
 
-    // Eliminar una actividad
-    public function eliminar($id)
+    // Eliminar una actividad, verificando que pertenezca al usuario
+    public function eliminar($id, $usuarioId)
     {
-        $stmt = $this->db->prepare("DELETE FROM actividades WHERE id = :id");
+        $stmt = $this->db->prepare(
+            "DELETE FROM actividades WHERE id = :id AND usuario_id = :usuario_id"
+        );
 
-        return $stmt->execute(['id' => (int) $id]);
+        return $stmt->execute([
+            'id' => (int) $id,
+            'usuario_id' => (int) $usuarioId,
+        ]);
     }
 
-    // Actualizar una actividad
-    public function actualizar($id, $datos)
+    // Actualizar una actividad, verificando que pertenezca al usuario
+    public function actualizar($id, $datos, $usuarioId)
     {
         $stmt = $this->db->prepare(
             "UPDATE actividades
@@ -69,7 +85,7 @@ class Actividad
                  hora_inicio = :hora_inicio,
                  hora_fin = :hora_fin,
                  lugar = :lugar
-             WHERE id = :id"
+             WHERE id = :id AND usuario_id = :usuario_id"
         );
 
         return $stmt->execute([
@@ -80,6 +96,7 @@ class Actividad
             'hora_fin' => $datos['hora_fin'],
             'lugar' => $datos['lugar'],
             'id' => (int) $id,
+            'usuario_id' => (int) $usuarioId,
         ]);
     }
 }

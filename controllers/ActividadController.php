@@ -11,33 +11,28 @@ class ActividadController
         $this->actividad = new Actividad();
     }
 
-    // Listar todas las actividades
-    public function listar()
+    public function listar($usuarioId)
     {
-        return $this->actividad->listar();
+        return $this->actividad->listar($usuarioId);
     }
 
-    // Buscar una actividad por ID
-    public function buscarPorId($id)
+    public function buscarPorId($id, $usuarioId)
     {
-        return $this->actividad->buscarPorId($id);
+        return $this->actividad->buscarPorId($id, $usuarioId);
     }
 
-    // Crear una actividad
-    public function crear($datos)
+    public function crear($datos, $usuarioId)
     {
-        return $this->actividad->crear($datos);
+        return $this->actividad->crear($datos, $usuarioId);
     }
 
-    // Actualizar una actividad
-    public function actualizar($id, $datos)
+    public function actualizar($id, $datos, $usuarioId)
     {
-        return $this->actividad->actualizar($id, $datos);
+        return $this->actividad->actualizar($id, $datos, $usuarioId);
     }
 
-    // Eliminar una actividad
-    public function eliminar($id)
+    public function eliminar($id, $usuarioId)
     {
-        return $this->actividad->eliminar($id);
+        return $this->actividad->eliminar($id, $usuarioId);
     }
 }

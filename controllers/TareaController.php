@@ -11,33 +11,28 @@ class TareaController
         $this->tarea = new Tarea();
     }
 
-    // Listar todas las tareas
-    public function listar()
+    public function listar($usuarioId)
     {
-        return $this->tarea->listar();
+        return $this->tarea->listar($usuarioId);
     }
 
-    // Buscar una tarea por ID
-    public function buscarPorId($id)
+    public function buscarPorId($id, $usuarioId)
     {
-        return $this->tarea->buscarPorId($id);
+        return $this->tarea->buscarPorId($id, $usuarioId);
     }
 
-    // Crear una tarea
-    public function crear($datos)
+    public function crear($datos, $usuarioId)
     {
-        return $this->tarea->crear($datos);
+        return $this->tarea->crear($datos, $usuarioId);
     }
 
-    // Actualizar una tarea
-    public function actualizar($id, $datos)
+    public function actualizar($id, $datos, $usuarioId)
     {
-        return $this->tarea->actualizar($id, $datos);
+        return $this->tarea->actualizar($id, $datos, $usuarioId);
     }
 
-    // Eliminar una tarea
-    public function eliminar($id)
+    public function eliminar($id, $usuarioId)
     {
-        return $this->tarea->eliminar($id);
+        return $this->tarea->eliminar($id, $usuarioId);
     }
 }

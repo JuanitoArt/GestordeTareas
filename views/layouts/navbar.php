@@ -60,6 +60,17 @@ $accionActual = $_GET['accion'] ?? 'inicio';
 
                 </li>
 
+                <li class="nav-item">
+
+                    <a class="nav-link" href="index.php?accion=logout">
+
+                        <i class="bi bi-box-arrow-right"></i>
+                        <?= htmlspecialchars($_SESSION['nombre_usuario'] ?? '') ?> · Salir
+
+                    </a>
+
+                </li>
+
             </ul>
 
         </div>

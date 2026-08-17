@@ -11,31 +11,41 @@ class Tarea
         $this->db = Database::getConexion();
     }
 
-    // Obtener todas las tareas
-    public function listar()
+    // Obtener todas las tareas DE UN USUARIO
+    public function listar($usuarioId)
     {
-        $stmt = $this->db->query("SELECT * FROM tareas ORDER BY id DESC");
+        $stmt = $this->db->prepare(
+            "SELECT * FROM tareas WHERE usuario_id = :usuario_id ORDER BY id DESC"
+        );
+
+        $stmt->execute(['usuario_id' => (int) $usuarioId]);
 
         return $stmt->fetchAll();
     }
 
-    // Buscar una tarea por ID
-    public function buscarPorId($id)
+    // Buscar una tarea por ID, verificando que pertenezca al usuario
+    public function buscarPorId($id, $usuarioId)
     {
-        $stmt = $this->db->prepare("SELECT * FROM tareas WHERE id = :id");
-        $stmt->execute(['id' => (int) $id]);
+        $stmt = $this->db->prepare(
+            "SELECT * FROM tareas WHERE id = :id AND usuario_id = :usuario_id"
+        );
+
+        $stmt->execute([
+            'id' => (int) $id,
+            'usuario_id' => (int) $usuarioId,
+        ]);
 
         $tarea = $stmt->fetch();
 
         return $tarea ?: null;
     }
 
-    // Crear una tarea
-    public function crear($datos)
+    // Crear una tarea para un usuario
+    public function crear($datos, $usuarioId)
     {
         $stmt = $this->db->prepare(
-            "INSERT INTO tareas (titulo, descripcion, prioridad, fecha_limite, estado)
-             VALUES (:titulo, :descripcion, :prioridad, :fecha_limite, :estado)"
+            "INSERT INTO tareas (titulo, descripcion, prioridad, fecha_limite, estado, usuario_id)
+             VALUES (:titulo, :descripcion, :prioridad, :fecha_limite, :estado, :usuario_id)"
         );
 
         $stmt->execute([
@@ -44,13 +54,14 @@ class Tarea
             'prioridad' => $datos['prioridad'],
             'fecha_limite' => $datos['fecha_limite'],
             'estado' => 'Pendiente',
+            'usuario_id' => (int) $usuarioId,
         ]);
 
-        return $this->buscarPorId($this->db->lastInsertId());
+        return $this->buscarPorId($this->db->lastInsertId(), $usuarioId);
     }
 
-    // Editar una tarea
-    public function actualizar($id, $datos)
+    // Editar una tarea, verificando que pertenezca al usuario
+    public function actualizar($id, $datos, $usuarioId)
     {
         $stmt = $this->db->prepare(
             "UPDATE tareas
@@ -59,7 +70,7 @@ class Tarea
                  prioridad = :prioridad,
                  fecha_limite = :fecha_limite,
                  estado = :estado
-             WHERE id = :id"
+             WHERE id = :id AND usuario_id = :usuario_id"
         );
 
         return $stmt->execute([
@@ -69,14 +80,20 @@ class Tarea
             'fecha_limite' => $datos['fecha_limite'],
             'estado' => $datos['estado'],
             'id' => (int) $id,
+            'usuario_id' => (int) $usuarioId,
         ]);
     }
 
-    // Eliminar una tarea
-    public function eliminar($id)
+    // Eliminar una tarea, verificando que pertenezca al usuario
+    public function eliminar($id, $usuarioId)
     {
-        $stmt = $this->db->prepare("DELETE FROM tareas WHERE id = :id");
+        $stmt = $this->db->prepare(
+            "DELETE FROM tareas WHERE id = :id AND usuario_id = :usuario_id"
+        );
 
-        return $stmt->execute(['id' => (int) $id]);
+        return $stmt->execute([
+            'id' => (int) $id,
+            'usuario_id' => (int) $usuarioId,
+        ]);
     }
 }
