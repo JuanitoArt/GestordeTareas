@@ -428,4 +428,98 @@ body{
 
 }
 
+/* ===== Asistente de voz ===== */
+
+.voz-widget{
+
+    position:fixed;
+
+    bottom:100px;
+
+    right:16px;
+
+    z-index:1000;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-end;
+
+    gap:6px;
+
+}
+
+.voz-btn-activar{
+
+    background:#0d6efd;
+
+    color:white;
+
+    border:none;
+
+    border-radius:30px;
+
+    padding:10px 18px;
+
+    font-weight:600;
+
+    box-shadow:0 8px 20px rgba(13,110,253,.35);
+
+    cursor:pointer;
+
+}
+
+.voz-badge{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:6px 14px;
+
+    font-size:.8rem;
+
+    color:#6c757d;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+
+    border:2px solid transparent;
+
+}
+
+.voz-badge.voz-activo{
+
+    border-color:#22C55E;
+
+    color:#16794a;
+
+    font-weight:600;
+
+}
+
+@media (max-width:768px){
+
+    .voz-widget{
+
+        bottom:80px;
+
+    }
+
+}
+
 </style>
+
+<div class="voz-widget">
+
+    <button id="voz-activar" class="voz-btn-activar" type="button">
+        🎤 Activar asistente de voz
+    </button>
+
+    <div id="voz-badge" class="voz-badge">
+        <span id="voz-estado">Desactivado</span>
+    </div>
+
+</div>
+
+<script src="assets/js/voz.js" defer></script>
