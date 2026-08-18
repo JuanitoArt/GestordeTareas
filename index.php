@@ -91,6 +91,44 @@ switch ($accion) {
 
         break;
 
+    // ── Rutas para el asistente de voz ──
+
+    case 'apiTareas':
+
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($tareaController->listar($usuarioId));
+        exit;
+
+        break;
+
+    case 'apiActividades':
+
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($actividadController->listar($usuarioId));
+        exit;
+
+        break;
+
+    case 'completarTarea':
+
+        $id = $_GET['id'];
+
+        $tarea = $tareaController->buscarPorId($id, $usuarioId);
+
+        if ($tarea) {
+
+            $datos = $tarea;
+            $datos['estado'] = 'Completada';
+
+            $tareaController->actualizar($id, $datos, $usuarioId);
+
+        }
+
+        header('Location: index.php?accion=tareas');
+        exit;
+
+        break;
+
     case 'actualizarActividad':
 
     $id = $_GET['id'];

@@ -470,6 +470,93 @@ body{
 
 }
 
+.voz-btn-desactivar{
+
+    background:#6c757d;
+
+    color:white;
+
+    border:none;
+
+    border-radius:30px;
+
+    padding:8px 16px;
+
+    font-size:.85rem;
+
+    font-weight:600;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+
+    cursor:pointer;
+
+}
+
+.voz-confirmacion{
+
+    background:white;
+
+    border:2px solid #0d6efd;
+
+    border-radius:14px;
+
+    padding:12px 14px;
+
+    width:260px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+    font-size:.9rem;
+
+}
+
+.voz-log{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    max-width:260px;
+
+    max-height:150px;
+
+    overflow-y:auto;
+
+}
+
+.voz-log-usuario,
+.voz-log-bot{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:6px 10px;
+
+    font-size:.75rem;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+}
+
+.voz-log-usuario{
+
+    color:#212529;
+
+    align-self:flex-end;
+
+}
+
+.voz-log-bot{
+
+    color:#0d6efd;
+
+    align-self:flex-start;
+
+}
+
 .voz-badge{
 
     background:white;
@@ -515,6 +602,20 @@ body{
     <button id="voz-activar" class="voz-btn-activar" type="button">
         🎤 Activar asistente de voz
     </button>
+
+    <button id="voz-desactivar" class="voz-btn-desactivar" type="button" style="display:none;">
+        🔇 Desactivar asistente
+    </button>
+
+    <div id="voz-confirmacion" class="voz-confirmacion" style="display:none;">
+        <p id="voz-confirmacion-texto" class="mb-2"></p>
+        <div class="d-flex gap-2 justify-content-end">
+            <button id="voz-confirmar-si" type="button" class="btn btn-success btn-sm">Sí</button>
+            <button id="voz-confirmar-no" type="button" class="btn btn-secondary btn-sm">No</button>
+        </div>
+    </div>
+
+    <div id="voz-log" class="voz-log"></div>
 
     <div id="voz-badge" class="voz-badge">
         <span id="voz-estado">Desactivado</span>
