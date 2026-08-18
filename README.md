@@ -1,4 +1,4 @@
-# 📅 Mi Agenda Digital
+#  Mi Agenda Digital
 
 Gestor personal de **tareas** y **actividades** desarrollado en PHP puro (sin framework), con arquitectura MVC simplificada, autenticación de usuarios y un asistente por comandos de voz.
 
@@ -6,21 +6,21 @@ Cada usuario tiene su propia cuenta y solo puede ver, crear, editar y eliminar s
 
 ---
 
-## ✨ Características
+##  Características
 
-- 🔐 **Autenticación de usuarios**: registro e inicio de sesión con contraseñas hasheadas (`password_hash` / `password_verify`).
-- 📋 **Gestión de tareas**: título, descripción, prioridad (Alta/Media/Baja), fecha límite y estado (Pendiente, En progreso, Completada, Cancelada).
-- 📅 **Gestión de actividades**: título, descripción, fecha, hora de inicio/fin y lugar.
-- 🏠 **Dashboard "Inicio"**: saludo dinámico según la hora, resumen de tareas del día y la próxima actividad (o la que está en curso).
-- 🕐 **Vista "Mi Día"**: línea de tiempo con las actividades del día, indicando si están pendientes, en curso o finalizadas.
-- 🔎 **Búsqueda y filtros**: por texto, estado, prioridad y rango de fechas.
-- 🎤 **Asistente de voz**: permite crear tareas y actividades hablando, usando la Web Speech API del navegador (reconocimiento y síntesis de voz en español).
-- 📱 **Diseño responsive**: barra de navegación inferior en móviles con botón flotante para crear tareas/actividades rápidamente.
-- 🗄️ **Migración de datos**: script incluido para migrar datos antiguos almacenados en JSON hacia MySQL.
+-  **Autenticación de usuarios**: registro e inicio de sesión con contraseñas hasheadas (`password_hash` / `password_verify`).
+-  **Gestión de tareas**: título, descripción, prioridad (Alta/Media/Baja), fecha límite y estado (Pendiente, En progreso, Completada, Cancelada).
+-  **Gestión de actividades**: título, descripción, fecha, hora de inicio/fin y lugar.
+-  **Dashboard "Inicio"**: saludo dinámico según la hora, resumen de tareas del día y la próxima actividad (o la que está en curso).
+-  **Vista "Mi Día"**: línea de tiempo con las actividades del día, indicando si están pendientes, en curso o finalizadas.
+-  **Búsqueda y filtros**: por texto, estado, prioridad y rango de fechas.
+-  **Asistente de voz**: permite crear tareas y actividades hablando, usando la Web Speech API del navegador (reconocimiento y síntesis de voz en español).
+-  **Diseño responsive**: barra de navegación inferior en móviles con botón flotante para crear tareas/actividades rápidamente.
+-  **Migración de datos**: script incluido para migrar datos antiguos almacenados en JSON hacia MySQL.
 
 ---
 
-## 🛠️ Stack técnico
+##  Stack técnico
 
 | Capa | Tecnología |
 |---|---|
@@ -35,7 +35,7 @@ Cada usuario tiene su propia cuenta y solo puede ver, crear, editar y eliminar s
 
 ---
 
-## 📂 Estructura del proyecto
+##  Estructura del proyecto
 
 ```
 GestordeTareas/
