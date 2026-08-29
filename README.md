@@ -1,4 +1,4 @@
-# 📅 Mi Agenda Digital
+#  Mi Agenda Digital
 
 Gestor personal de **tareas** y **actividades** desarrollado en PHP puro (sin framework), con arquitectura MVC simplificada, autenticación de usuarios y un asistente por comandos de voz.
 
@@ -6,21 +6,21 @@ Cada usuario tiene su propia cuenta y solo puede ver, crear, editar y eliminar s
 
 ---
 
-## ✨ Características
+##  Características
 
-- 🔐 **Autenticación de usuarios**: registro e inicio de sesión con contraseñas hasheadas (`password_hash` / `password_verify`).
-- 📋 **Gestión de tareas**: título, descripción, prioridad (Alta/Media/Baja), fecha límite y estado (Pendiente, En progreso, Completada, Cancelada).
-- 📅 **Gestión de actividades**: título, descripción, fecha, hora de inicio/fin y lugar.
-- 🏠 **Dashboard "Inicio"**: saludo dinámico según la hora, resumen de tareas del día y la próxima actividad (o la que está en curso).
-- 🕐 **Vista "Mi Día"**: línea de tiempo con las actividades del día, indicando si están pendientes, en curso o finalizadas.
-- 🔎 **Búsqueda y filtros**: por texto, estado, prioridad y rango de fechas.
-- 🎤 **Asistente de voz**: permite crear tareas y actividades hablando, usando la Web Speech API del navegador (reconocimiento y síntesis de voz en español).
-- 📱 **Diseño responsive**: barra de navegación inferior en móviles con botón flotante para crear tareas/actividades rápidamente.
-- 🗄️ **Migración de datos**: script incluido para migrar datos antiguos almacenados en JSON hacia MySQL.
+-  **Autenticación de usuarios**: registro e inicio de sesión con contraseñas hasheadas (`password_hash` / `password_verify`).
+-  **Gestión de tareas**: título, descripción, prioridad (Alta/Media/Baja), fecha límite y estado (Pendiente, En progreso, Completada, Cancelada).
+-  **Gestión de actividades**: título, descripción, fecha, hora de inicio/fin y lugar.
+-  **Dashboard "Inicio"**: saludo dinámico según la hora, resumen de tareas del día y la próxima actividad (o la que está en curso).
+-  **Vista "Mi Día"**: línea de tiempo con las actividades del día, indicando si están pendientes, en curso o finalizadas.
+-  **Búsqueda y filtros**: por texto, estado, prioridad y rango de fechas.
+-  **Asistente de voz**: permite crear tareas y actividades hablando, usando la Web Speech API del navegador (reconocimiento y síntesis de voz en español).
+-  **Diseño responsive**: barra de navegación inferior en móviles con botón flotante para crear tareas/actividades rápidamente.
+-  **Migración de datos**: script incluido para migrar datos antiguos almacenados en JSON hacia MySQL.
 
 ---
 
-## 🛠️ Stack técnico
+##  Stack técnico
 
 | Capa | Tecnología |
 |---|---|
@@ -35,7 +35,7 @@ Cada usuario tiene su propia cuenta y solo puede ver, crear, editar y eliminar s
 
 ---
 
-## 📂 Estructura del proyecto
+##  Estructura del proyecto
 
 ```
 GestordeTareas/
@@ -82,11 +82,11 @@ GestordeTareas/
 └── README.md
 ```
 
-> 📌 No se encontró un `database/schema.sql` en el proyecto — solo quedan los `.json` legados de la versión anterior. Se recomienda agregar el script de creación de tablas (ver sección [Base de datos](#-base-de-datos)) dentro de `database/`.
 
----
 
-## ⚙️ Requisitos
+
+
+##  Requisitos
 
 - PHP **8.0 o superior** (se usan tipado de propiedades como `private PDO $db`)
 - MySQL / MariaDB
@@ -95,7 +95,7 @@ GestordeTareas/
 
 ---
 
-## 🚀 Instalación
+##  Instalación
 
 1. **Clona o copia el proyecto** dentro de tu carpeta de servidor (ej. `C:\xampp\htdocs\GestordeTareas`).
 
@@ -128,7 +128,7 @@ GestordeTareas/
 
 ---
 
-## 🗄️ Base de datos
+##  Base de datos
 
 Tablas inferidas a partir de las consultas SQL del proyecto (ajusta tipos/longitudes según tus necesidades):
 
@@ -165,11 +165,11 @@ CREATE TABLE actividades (
 );
 ```
 
-> 📌 Este esquema fue reconstruido a partir del código (`Actividad.php`, `Tarea.php`, `Usuario.php`), no de un `schema.sql` real. Verifica que coincida con tu base de datos actual y reemplaza este bloque por tu script real si ya lo tienes.
+>  Este esquema fue reconstruido a partir del código (`Actividad.php`, `Tarea.php`, `Usuario.php`), no de un `schema.sql` real. Verifica que coincida con tu base de datos actual y reemplaza este bloque por tu script real si ya lo tienes.
 
 ---
 
-## 🧭 Rutas / acciones disponibles
+## Rutas / acciones disponibles
 
 Todas las rutas pasan por `index.php?accion=...`:
 
@@ -195,7 +195,7 @@ Todas las rutas pasan por `index.php?accion=...`:
 
 ---
 
-## 🎤 Asistente de voz
+##  Asistente de voz
 
 El proyecto incluye un asistente controlado por voz (`assets/js/voz.js`), visible como un widget flotante en la esquina inferior derecha.
 
@@ -208,10 +208,10 @@ El proyecto incluye un asistente controlado por voz (`assets/js/voz.js`), visibl
 
 ---
 
-## 👤 Autor
+##  Autor
 
 Juan Andres Galvis Bejaano / JuanitoArt
 
-## 📄 Licencia
+##  Licencia
 
 _Agrega aquí la licencia del proyecto (MIT, GPL, etc.) o elimina esta sección si no aplica._
