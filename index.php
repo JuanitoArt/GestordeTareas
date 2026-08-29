@@ -29,6 +29,19 @@ if (isset($_SESSION['usuario_id']) && in_array($accion, $accionesPublicas)) {
 
 $usuarioId = $_SESSION['usuario_id'] ?? null;
 
+// FIX: helper para leer 'id' de la URL de forma segura. Antes cada case
+// hacía $_GET['id'] directo, y si el parámetro faltaba o no era numérico,
+// PHP lanzaba un warning de "undefined array key" y el flujo seguía con
+// un id vacío/inválido.
+function obtenerIdDeUrl()
+{
+    if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        return null;
+    }
+
+    return (int) $_GET['id'];
+}
+
 switch ($accion) {
 
     case 'login':
@@ -111,7 +124,12 @@ switch ($accion) {
 
     case 'completarTarea':
 
-        $id = $_GET['id'];
+        $id = obtenerIdDeUrl();
+
+        if ($id === null) {
+            header('Location: index.php?accion=tareas');
+            exit;
+        }
 
         $tarea = $tareaController->buscarPorId($id, $usuarioId);
 
@@ -131,7 +149,12 @@ switch ($accion) {
 
     case 'actualizarActividad':
 
-    $id = $_GET['id'];
+    $id = obtenerIdDeUrl();
+
+    if ($id === null) {
+        header('Location: index.php?accion=actividades');
+        exit;
+    }
 
     $datos = [
         'titulo' => $_POST['titulo'] ?? '',
@@ -152,7 +175,12 @@ switch ($accion) {
 
     case 'eliminarActividad':
 
-    $id = $_GET['id'];
+    $id = obtenerIdDeUrl();
+
+    if ($id === null) {
+        header('Location: index.php?accion=actividades');
+        exit;
+    }
 
     $actividadController->eliminar($id, $usuarioId);
 
@@ -163,9 +191,22 @@ switch ($accion) {
 
     case 'editarActividad':
 
-    $id = $_GET['id'];
+    $id = obtenerIdDeUrl();
+
+    if ($id === null) {
+        header('Location: index.php?accion=actividades');
+        exit;
+    }
 
     $actividad = $actividadController->buscarPorId($id, $usuarioId);
+
+    // FIX: si el id no existe o pertenece a otro usuario, buscarPorId()
+    // devuelve null y la vista editar.php intentaba leer $actividad['id'],
+    // $actividad['titulo'], etc. sobre null (warnings + formulario vacío).
+    if (!$actividad) {
+        header('Location: index.php?accion=actividades&error=' . urlencode('La actividad no existe o no tienes permiso para editarla.'));
+        exit;
+    }
 
     require_once __DIR__ . '/views/actividades/editar.php';
 
@@ -306,7 +347,12 @@ switch ($accion) {
 
     case 'eliminarTarea':
 
-    $id = $_GET['id'];
+    $id = obtenerIdDeUrl();
+
+    if ($id === null) {
+        header('Location: index.php?accion=tareas');
+        exit;
+    }
 
     $tareaController->eliminar($id, $usuarioId);
 
@@ -317,7 +363,12 @@ switch ($accion) {
 
     case 'actualizarTarea':
 
-    $id = $_GET['id'];
+    $id = obtenerIdDeUrl();
+
+    if ($id === null) {
+        header('Location: index.php?accion=tareas');
+        exit;
+    }
 
     $datos = [
         'titulo' => $_POST['titulo'] ?? '',
@@ -336,9 +387,22 @@ switch ($accion) {
 
     case 'editarTarea':
 
-    $id = $_GET['id'];
+    $id = obtenerIdDeUrl();
+
+    if ($id === null) {
+        header('Location: index.php?accion=tareas');
+        exit;
+    }
 
     $tarea = $tareaController->buscarPorId($id, $usuarioId);
+
+    // FIX: si el id no existe o pertenece a otro usuario, buscarPorId()
+    // devuelve null y la vista editar.php intentaba leer $tarea['id'],
+    // $tarea['titulo'], etc. sobre null (warnings + formulario vacío).
+    if (!$tarea) {
+        header('Location: index.php?accion=tareas&error=' . urlencode('La tarea no existe o no tienes permiso para editarla.'));
+        exit;
+    }
 
     require_once __DIR__ . '/views/tareas/editar.php';
 

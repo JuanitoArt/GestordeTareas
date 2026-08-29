@@ -50,7 +50,16 @@ class AuthController
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-        $this->usuario->crear($nombreUsuario, $correo, $passwordHash);
+        // FIX: aunque ya validamos con existe() arriba, si dos personas se
+        // registran casi al mismo tiempo con el mismo usuario/correo, el
+        // segundo INSERT puede chocar con la restricción UNIQUE de la tabla.
+        // Antes eso lanzaba una PDOException sin capturar (error fatal feo);
+        // ahora se devuelve como el mismo mensaje de "ya existe".
+        try {
+            $this->usuario->crear($nombreUsuario, $correo, $passwordHash);
+        } catch (PDOException $e) {
+            return ['exito' => false, 'error' => 'Ya existe una cuenta con ese usuario o correo.'];
+        }
 
         return ['exito' => true, 'error' => null];
     }
