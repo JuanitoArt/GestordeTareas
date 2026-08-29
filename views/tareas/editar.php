@@ -9,110 +9,125 @@ require_once __DIR__ . '/../layouts/navbar.php';
 
 ?>
 
-<h1>✏️ Editar tarea</h1>
+<div class="row justify-content-center">
 
-<form action="index.php?accion=actualizarTarea&id=<?= (int) $tarea['id'] ?>" method="POST">
+    <div class="col-md-8 col-lg-6">
 
-    <label for="titulo">Título:</label><br>
+        <div class="card shadow-sm">
 
-    <input
-        type="text"
-        id="titulo"
-        name="titulo"
-        value="<?= htmlspecialchars($tarea['titulo']) ?>"
-        required
-    >
+            <div class="card-body p-4">
 
-    <br><br>
+                <h2 class="mb-4">
+                    ✏️ Editar tarea
+                </h2>
 
-    <label for="descripcion">Descripción:</label><br>
+                <form action="index.php?accion=actualizarTarea&id=<?= (int) $tarea['id'] ?>" method="POST">
 
-    <textarea
-        id="descripcion"
-        name="descripcion"
-        rows="4"
-        required
-    ><?= htmlspecialchars($tarea['descripcion']) ?></textarea>
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título</label>
+                        <input
+                            type="text"
+                            id="titulo"
+                            name="titulo"
+                            class="form-control"
+                            value="<?= htmlspecialchars($tarea['titulo']) ?>"
+                            required
+                            autofocus
+                        >
+                    </div>
 
-    <br><br>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea
+                            id="descripcion"
+                            name="descripcion"
+                            class="form-control"
+                            rows="4"
+                            required
+                        ><?= htmlspecialchars($tarea['descripcion']) ?></textarea>
+                    </div>
 
-    <label for="prioridad">Prioridad:</label><br>
+                    <div class="mb-3">
+                        <label for="prioridad" class="form-label">Prioridad</label>
+                        <select id="prioridad" name="prioridad" class="form-select" required>
 
-    <select id="prioridad" name="prioridad" required>
+                            <option value="Baja"
+                                <?= $tarea['prioridad'] == 'Baja' ? 'selected' : '' ?>>
+                                Baja
+                            </option>
 
-        <option value="Baja"
-            <?= $tarea['prioridad'] == 'Baja' ? 'selected' : '' ?>>
-            Baja
-        </option>
+                            <option value="Media"
+                                <?= $tarea['prioridad'] == 'Media' ? 'selected' : '' ?>>
+                                Media
+                            </option>
 
-        <option value="Media"
-            <?= $tarea['prioridad'] == 'Media' ? 'selected' : '' ?>>
-            Media
-        </option>
+                            <option value="Alta"
+                                <?= $tarea['prioridad'] == 'Alta' ? 'selected' : '' ?>>
+                                Alta
+                            </option>
 
-        <option value="Alta"
-            <?= $tarea['prioridad'] == 'Alta' ? 'selected' : '' ?>>
-            Alta
-        </option>
+                        </select>
+                    </div>
 
-    </select>
+                    <div class="mb-3">
+                        <label for="fecha_limite" class="form-label">Fecha límite</label>
+                        <input
+                            type="date"
+                            id="fecha_limite"
+                            name="fecha_limite"
+                            class="form-control"
+                            value="<?= htmlspecialchars($tarea['fecha_limite']) ?>"
+                            required
+                        >
+                    </div>
 
-    <br><br>
+                    <div class="mb-4">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select id="estado" name="estado" class="form-select">
 
-    <label for="fecha_limite">Fecha límite:</label><br>
+                            <option value="Pendiente"
+                                <?= $tarea['estado'] == 'Pendiente' ? 'selected' : '' ?>>
+                                Pendiente
+                            </option>
 
-    <input
-        type="date"
-        id="fecha_limite"
-        name="fecha_limite"
-        value="<?= htmlspecialchars($tarea['fecha_limite']) ?>"
-        required
-    >
+                            <option value="En progreso"
+                                <?= $tarea['estado'] == 'En progreso' ? 'selected' : '' ?>>
+                                En progreso
+                            </option>
 
-    <br><br>
+                            <option value="Completada"
+                                <?= $tarea['estado'] == 'Completada' ? 'selected' : '' ?>>
+                                Completada
+                            </option>
 
-    <label for="estado">
-        Estado:
-    </label>
+                            <option value="Cancelada"
+                                <?= $tarea['estado'] == 'Cancelada' ? 'selected' : '' ?>>
+                                Cancelada
+                            </option>
 
-    <br>
+                        </select>
+                    </div>
 
-    <select id="estado" name="estado">
+                    <div class="d-flex justify-content-between">
 
-        <option value="Pendiente"
-            <?= $tarea['estado'] == 'Pendiente' ? 'selected' : '' ?>>
-            Pendiente
-        </option>
+                        <a href="index.php?accion=tareas" class="btn btn-outline-secondary">
+                            ← Volver
+                        </a>
 
-        <option value="En progreso"
-            <?= $tarea['estado'] == 'En progreso' ? 'selected' : '' ?>>
-            En progreso
-        </option>
+                        <button type="submit" class="btn btn-primary">
+                            💾 Actualizar tarea
+                        </button>
 
-        <option value="Completada"
-            <?= $tarea['estado'] == 'Completada' ? 'selected' : '' ?>>
-            Completada
-        </option>
+                    </div>
 
-        <option value="Cancelada"
-            <?= $tarea['estado'] == 'Cancelada' ? 'selected' : '' ?>>
-            Cancelada
-        </option>
+                </form>
 
-    </select>
+            </div>
 
-    <br><br>
+        </div>
 
-    <button type="submit">
-        💾 Actualizar tarea
-    </button>
+    </div>
 
-</form>
-
-<br>
-
-<a href="index.php?accion=tareas">
-    ← Volver
-</a>
+</div>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

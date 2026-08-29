@@ -9,115 +9,116 @@ require_once __DIR__ . '/../layouts/navbar.php';
 
 ?>
 
-<h1>✏️ Editar actividad</h1>
+<div class="row justify-content-center">
 
-<form action="index.php?accion=actualizarActividad&id=<?= (int) $actividad['id'] ?>" method="POST">
+    <div class="col-md-8 col-lg-6">
 
-    <label for="titulo">
-        Título:
-    </label>
+        <div class="card shadow-sm">
 
-    <br>
+            <div class="card-body p-4">
 
-    <input
-        type="text"
-        id="titulo"
-        name="titulo"
-        value="<?= htmlspecialchars($actividad['titulo']) ?>"
-        required
-    >
+                <h2 class="mb-4">
+                    ✏️ Editar actividad
+                </h2>
 
-    <br><br>
+                <form action="index.php?accion=actualizarActividad&id=<?= (int) $actividad['id'] ?>" method="POST">
 
-    <label for="descripcion">
-        Descripción:
-    </label>
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título</label>
+                        <input
+                            type="text"
+                            id="titulo"
+                            name="titulo"
+                            class="form-control"
+                            value="<?= htmlspecialchars($actividad['titulo']) ?>"
+                            required
+                            autofocus
+                        >
+                    </div>
 
-    <br>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea
+                            id="descripcion"
+                            name="descripcion"
+                            class="form-control"
+                            rows="4"
+                            required
+                        ><?= htmlspecialchars($actividad['descripcion']) ?></textarea>
+                    </div>
 
-    <textarea
-        id="descripcion"
-        name="descripcion"
-        rows="4"
-        required
-    ><?= htmlspecialchars($actividad['descripcion']) ?></textarea>
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input
+                            type="date"
+                            id="fecha"
+                            name="fecha"
+                            class="form-control"
+                            value="<?= htmlspecialchars($actividad['fecha']) ?>"
+                            required
+                        >
+                    </div>
 
-    <br><br>
+                    <div class="row">
 
-    <label for="fecha">
-        Fecha:
-    </label>
+                        <div class="col-6 mb-3">
+                            <label for="hora_inicio" class="form-label">Hora inicio</label>
+                            <input
+                                type="time"
+                                id="hora_inicio"
+                                name="hora_inicio"
+                                class="form-control"
+                                value="<?= htmlspecialchars($actividad['hora_inicio']) ?>"
+                                required
+                            >
+                        </div>
 
-    <br>
+                        <div class="col-6 mb-3">
+                            <label for="hora_fin" class="form-label">Hora fin</label>
+                            <input
+                                type="time"
+                                id="hora_fin"
+                                name="hora_fin"
+                                class="form-control"
+                                value="<?= htmlspecialchars($actividad['hora_fin']) ?>"
+                                required
+                            >
+                        </div>
 
-    <input
-        type="date"
-        id="fecha"
-        name="fecha"
-        value="<?= htmlspecialchars($actividad['fecha']) ?>"
-        required
-    >
+                    </div>
 
-    <br><br>
+                    <div class="mb-4">
+                        <label for="lugar" class="form-label">Lugar</label>
+                        <input
+                            type="text"
+                            id="lugar"
+                            name="lugar"
+                            class="form-control"
+                            value="<?= htmlspecialchars($actividad['lugar']) ?>"
+                            required
+                        >
+                    </div>
 
-    <label for="hora_inicio">
-        Hora inicio:
-    </label>
+                    <div class="d-flex justify-content-between">
 
-    <br>
+                        <a href="index.php?accion=actividades" class="btn btn-outline-secondary">
+                            ← Volver
+                        </a>
 
-    <input
-        type="time"
-        id="hora_inicio"
-        name="hora_inicio"
-        value="<?= htmlspecialchars($actividad['hora_inicio']) ?>"
-        required
-    >
+                        <button type="submit" class="btn btn-primary">
+                            💾 Actualizar actividad
+                        </button>
 
-    <br><br>
+                    </div>
 
-    <label for="hora_fin">
-        Hora fin:
-    </label>
+                </form>
 
-    <br>
+            </div>
 
-    <input
-        type="time"
-        id="hora_fin"
-        name="hora_fin"
-        value="<?= htmlspecialchars($actividad['hora_fin']) ?>"
-        required
-    >
+        </div>
 
-    <br><br>
+    </div>
 
-    <label for="lugar">
-        Lugar:
-    </label>
-
-    <br>
-
-    <input
-        type="text"
-        id="lugar"
-        name="lugar"
-        value="<?= htmlspecialchars($actividad['lugar']) ?>"
-        required
-    >
-
-    <br><br>
-
-    <button type="submit">
-        💾 Actualizar actividad
-    </button>
-
-</form>
-
-<br>
-
-<a href="index.php?accion=actividades">
-    ← Volver
-</a>
+</div>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

@@ -4,110 +4,98 @@ require_once __DIR__ . '/../layouts/header.php';
 require_once __DIR__ . '/../layouts/navbar.php';
 ?>
 
-<h1>➕ Nueva tarea</h1>
+<div class="row justify-content-center">
 
-<form action="index.php?accion=guardarTarea" method="POST">
+    <div class="col-md-8 col-lg-6">
 
-    <div>
-        <label for="titulo">Título:</label>
-        <br>
+        <div class="card shadow-sm">
 
-        <input
-            type="text"
-            id="titulo"
-            name="titulo"
-            required
-        >
+            <div class="card-body p-4">
+
+                <h2 class="mb-4">
+                    ➕ Nueva tarea
+                </h2>
+
+                <form action="index.php?accion=guardarTarea" method="POST">
+
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título</label>
+                        <input
+                            type="text"
+                            id="titulo"
+                            name="titulo"
+                            class="form-control"
+                            required
+                            autofocus
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea
+                            id="descripcion"
+                            name="descripcion"
+                            class="form-control"
+                            rows="4"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="prioridad" class="form-label">Prioridad</label>
+                        <select id="prioridad" name="prioridad" class="form-select" required>
+
+                            <option value="">Seleccione una prioridad</option>
+                            <option value="Baja">Baja</option>
+                            <option value="Media">Media</option>
+                            <option value="Alta">Alta</option>
+
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fecha_limite" class="form-label">Fecha límite</label>
+                        <input
+                            type="date"
+                            id="fecha_limite"
+                            name="fecha_limite"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select id="estado" name="estado" class="form-select">
+
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En progreso">En progreso</option>
+                            <option value="Completada">Completada</option>
+                            <option value="Cancelada">Cancelada</option>
+
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <a href="index.php?accion=tareas" class="btn btn-outline-secondary">
+                            ← Volver a tareas
+                        </a>
+
+                        <button type="submit" class="btn btn-primary">
+                            💾 Guardar tarea
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <br>
-
-    <div>
-        <label for="descripcion">Descripción:</label>
-        <br>
-
-        <textarea
-            id="descripcion"
-            name="descripcion"
-            rows="4"
-            required
-        ></textarea>
-    </div>
-
-    <br>
-
-    <div>
-        <label for="prioridad">Prioridad:</label>
-        <br>
-
-        <select id="prioridad" name="prioridad" required>
-
-            <option value="">Seleccione una prioridad</option>
-            <option value="Baja">Baja</option>
-            <option value="Media">Media</option>
-            <option value="Alta">Alta</option>
-
-        </select>
-    </div>
-
-    <br>
-
-    <div>
-        <label for="fecha_limite">Fecha límite:</label>
-        <br>
-
-        <input
-            type="date"
-            id="fecha_limite"
-            name="fecha_limite"
-            required
-        >
-    </div>
-
-    <br>
-
-    <div>
-
-        <label for="estado">
-            Estado:
-        </label>
-
-        <br>
-
-        <select id="estado" name="estado">
-
-            <option value="Pendiente">
-                Pendiente
-            </option>
-
-            <option value="En progreso">
-                En progreso
-            </option>
-
-            <option value="Completada">
-                Completada
-            </option>
-
-            <option value="Cancelada">
-                Cancelada
-            </option>
-
-        </select>
-
-    </div>
-
-    <br><br>
-
-    <button type="submit">
-        💾 Guardar tarea
-    </button>
-
-</form>
-
-<br>
-
-<a href="index.php?accion=tareas">
-    ← Volver a tareas
-</a>
+</div>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

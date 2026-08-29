@@ -4,110 +4,111 @@ require_once __DIR__ . '/../layouts/header.php';
 require_once __DIR__ . '/../layouts/navbar.php';
 ?>
 
-<h1>➕ Nueva actividad</h1>
+<div class="row justify-content-center">
 
-<form action="index.php?accion=guardarActividad" method="POST">
+    <div class="col-md-8 col-lg-6">
 
-    <label for="titulo">
-        Título:
-    </label>
+        <div class="card shadow-sm">
 
-    <br>
+            <div class="card-body p-4">
 
-    <input
-        type="text"
-        id="titulo"
-        name="titulo"
-        required
-    >
+                <h2 class="mb-4">
+                    ➕ Nueva actividad
+                </h2>
 
-    <br><br>
+                <form action="index.php?accion=guardarActividad" method="POST">
 
-    <label for="descripcion">
-        Descripción:
-    </label>
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título</label>
+                        <input
+                            type="text"
+                            id="titulo"
+                            name="titulo"
+                            class="form-control"
+                            required
+                            autofocus
+                        >
+                    </div>
 
-    <br>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea
+                            id="descripcion"
+                            name="descripcion"
+                            class="form-control"
+                            rows="4"
+                            required
+                        ></textarea>
+                    </div>
 
-    <textarea
-        id="descripcion"
-        name="descripcion"
-        rows="4"
-        required
-    ></textarea>
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input
+                            type="date"
+                            id="fecha"
+                            name="fecha"
+                            class="form-control"
+                            required
+                        >
+                    </div>
 
-    <br><br>
+                    <div class="row">
 
-    <label for="fecha">
-        Fecha:
-    </label>
+                        <div class="col-6 mb-3">
+                            <label for="hora_inicio" class="form-label">Hora inicio</label>
+                            <input
+                                type="time"
+                                id="hora_inicio"
+                                name="hora_inicio"
+                                class="form-control"
+                                required
+                            >
+                        </div>
 
-    <br>
+                        <div class="col-6 mb-3">
+                            <label for="hora_fin" class="form-label">Hora fin</label>
+                            <input
+                                type="time"
+                                id="hora_fin"
+                                name="hora_fin"
+                                class="form-control"
+                                required
+                            >
+                        </div>
 
-    <input
-        type="date"
-        id="fecha"
-        name="fecha"
-        required
-    >
+                    </div>
 
-    <br><br>
+                    <div class="mb-4">
+                        <label for="lugar" class="form-label">Lugar</label>
+                        <input
+                            type="text"
+                            id="lugar"
+                            name="lugar"
+                            class="form-control"
+                            required
+                        >
+                    </div>
 
-    <label for="hora_inicio">
-        Hora inicio:
-    </label>
+                    <div class="d-flex justify-content-between">
 
-    <br>
+                        <a href="index.php?accion=actividades" class="btn btn-outline-secondary">
+                            ← Volver
+                        </a>
 
-    <input
-        type="time"
-        id="hora_inicio"
-        name="hora_inicio"
-        required
-    >
+                        <button type="submit" class="btn btn-primary">
+                            💾 Guardar actividad
+                        </button>
 
-    <br><br>
+                    </div>
 
-    <label for="hora_fin">
-        Hora fin:
-    </label>
+                </form>
 
-    <br>
+            </div>
 
-    <input
-        type="time"
-        id="hora_fin"
-        name="hora_fin"
-        required
-    >
+        </div>
 
-    <br><br>
+    </div>
 
-    <label for="lugar">
-        Lugar:
-    </label>
-
-    <br>
-
-    <input
-        type="text"
-        id="lugar"
-        name="lugar"
-        required
-    >
-
-    <br><br>
-
-    <button type="submit">
-        💾 Guardar actividad
-    </button>
-
-</form>
-
-<br>
-
-<a href="index.php?accion=actividades">
-    ← Volver
-</a>
+</div>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
