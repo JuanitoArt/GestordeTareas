@@ -16,6 +16,10 @@ $accion = $_GET['accion'] ?? 'inicio';
 // Rutas que cualquiera puede visitar sin haber iniciado sesión
 $accionesPublicas = ['login', 'registro', 'procesarLogin', 'procesarRegistro'];
 
+// Si no hay sesión activa pero existe una cookie válida de "Recordarme",
+// esto reconstruye la sesión automáticamente.
+$authController->intentarAutoLogin();
+
 if (!isset($_SESSION['usuario_id']) && !in_array($accion, $accionesPublicas)) {
     header('Location: index.php?accion=login');
     exit;
@@ -57,7 +61,8 @@ switch ($accion) {
 
         $resultado = $authController->iniciarSesion(
             $_POST['identificador'] ?? '',
-            $_POST['password'] ?? ''
+            $_POST['password'] ?? '',
+            !empty($_POST['recordar'])
         );
 
         if ($resultado['exito']) {

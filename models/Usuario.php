@@ -69,4 +69,50 @@ class Usuario
             'id' => (int) $id,
         ]);
     }
+
+    // Guarda el hash de un token de "recordarme" para un usuario
+    public function guardarTokenRecordar($usuarioId, $tokenHash, $expiraEn)
+    {
+        $stmt = $this->db->prepare(
+            "INSERT INTO tokens_recordar (usuario_id, token_hash, expira_en)
+             VALUES (:usuario_id, :token_hash, :expira_en)"
+        );
+
+        return $stmt->execute([
+            'usuario_id' => (int) $usuarioId,
+            'token_hash' => $tokenHash,
+            'expira_en' => $expiraEn,
+        ]);
+    }
+
+    // Busca un usuario a partir de un token de "recordarme" válido y no vencido
+    public function buscarPorTokenRecordar($usuarioId, $tokenHash)
+    {
+        $stmt = $this->db->prepare(
+            "SELECT u.* FROM usuarios u
+             INNER JOIN tokens_recordar t ON t.usuario_id = u.id
+             WHERE t.usuario_id = :usuario_id
+               AND t.token_hash = :token_hash
+               AND t.expira_en > NOW()"
+        );
+
+        $stmt->execute([
+            'usuario_id' => (int) $usuarioId,
+            'token_hash' => $tokenHash,
+        ]);
+
+        $usuario = $stmt->fetch();
+
+        return $usuario ?: null;
+    }
+
+    // Elimina todos los tokens de "recordarme" de un usuario (al cerrar sesión)
+    public function eliminarTokensRecordar($usuarioId)
+    {
+        $stmt = $this->db->prepare(
+            "DELETE FROM tokens_recordar WHERE usuario_id = :usuario_id"
+        );
+
+        return $stmt->execute(['usuario_id' => (int) $usuarioId]);
+    }
 }

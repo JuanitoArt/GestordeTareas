@@ -11,6 +11,10 @@ class AuthController
     // arbitrario en la base de datos.
     public const TEMAS_VALIDOS = ['indigo', 'azul', 'verde', 'rosa', 'naranja'];
 
+    // Nombre de la cookie de "Recordarme" y cuántos días dura.
+    private const COOKIE_RECORDAR = 'recordar_token';
+    private const DIAS_RECORDAR = 30;
+
     public function __construct()
     {
         $this->usuario = new Usuario();
@@ -70,7 +74,7 @@ class AuthController
     }
 
     // Inicia sesión. Devuelve ['exito' => bool, 'error' => string|null]
-    public function iniciarSesion($identificador, $password)
+    public function iniciarSesion($identificador, $password, $recordar = false)
     {
         $identificador = trim($identificador ?? '');
 
@@ -88,11 +92,94 @@ class AuthController
         $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
         $_SESSION['tema'] = $usuario['tema'] ?? 'indigo';
 
+        if ($recordar) {
+            $this->crearTokenRecordar($usuario['id']);
+        }
+
         return ['exito' => true, 'error' => null];
+    }
+
+    // Genera un token aleatorio, guarda solo su hash en la base de datos
+    // (igual que con las contraseñas) y deja el token real en una cookie
+    // httpOnly de larga duración para reconstruir la sesión más adelante.
+    private function crearTokenRecordar($usuarioId)
+    {
+        $token = bin2hex(random_bytes(32));
+        $tokenHash = hash('sha256', $token);
+        $expiraEnTimestamp = time() + (self::DIAS_RECORDAR * 86400);
+
+        $this->usuario->guardarTokenRecordar(
+            $usuarioId,
+            $tokenHash,
+            date('Y-m-d H:i:s', $expiraEnTimestamp)
+        );
+
+        setcookie(
+            self::COOKIE_RECORDAR,
+            $usuarioId . ':' . $token,
+            [
+                'expires' => $expiraEnTimestamp,
+                'path' => '/',
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ]
+        );
+    }
+
+    // Si no hay sesión activa pero existe una cookie de "recordarme" válida,
+    // reconstruye la sesión automáticamente. Devuelve true si el usuario
+    // quedó autenticado (ya sea porque tenía sesión o gracias a la cookie).
+    public function intentarAutoLogin()
+    {
+        if (isset($_SESSION['usuario_id'])) {
+            return true;
+        }
+
+        if (empty($_COOKIE[self::COOKIE_RECORDAR])) {
+            return false;
+        }
+
+        $partes = explode(':', $_COOKIE[self::COOKIE_RECORDAR], 2);
+
+        if (count($partes) !== 2) {
+            return false;
+        }
+
+        [$usuarioId, $token] = $partes;
+        $tokenHash = hash('sha256', $token);
+
+        $usuario = $this->usuario->buscarPorTokenRecordar($usuarioId, $tokenHash);
+
+        if (!$usuario) {
+            // Token inválido, ya usado o vencido: limpiamos la cookie para
+            // no seguir intentando en cada request.
+            $this->borrarCookieRecordar();
+            return false;
+        }
+
+        $_SESSION['usuario_id'] = $usuario['id'];
+        $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
+        $_SESSION['tema'] = $usuario['tema'] ?? 'indigo';
+
+        return true;
+    }
+
+    private function borrarCookieRecordar()
+    {
+        setcookie(self::COOKIE_RECORDAR, '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+        ]);
     }
 
     public function cerrarSesion()
     {
+        if (isset($_SESSION['usuario_id'])) {
+            $this->usuario->eliminarTokensRecordar($_SESSION['usuario_id']);
+        }
+
+        $this->borrarCookieRecordar();
+
         $_SESSION = [];
         session_destroy();
     }

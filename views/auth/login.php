@@ -56,6 +56,18 @@ require_once __DIR__ . '/../layouts/header.php';
                         >
                     </div>
 
+                    <div class="mb-3 form-check">
+                        <input
+                            type="checkbox"
+                            id="recordar"
+                            name="recordar"
+                            class="form-check-input"
+                        >
+                        <label for="recordar" class="form-check-label">
+                            Recordarme en este dispositivo
+                        </label>
+                    </div>
+
                     <button type="submit" class="btn btn-primary w-100">
                         Entrar
                     </button>
