@@ -104,6 +104,18 @@ switch ($accion) {
 
         break;
 
+    case 'actualizarTema':
+
+        $authController->actualizarTema($usuarioId, $_POST['tema'] ?? '');
+
+        // Vuelve a la página desde donde se cambió el tema; si no viene
+        // referer válido (poco común), cae al dashboard.
+        $volverA = $_POST['volver_a'] ?? 'inicio';
+        header('Location: index.php?accion=' . urlencode($volverA));
+        exit;
+
+        break;
+
     // ── Rutas para el asistente de voz ──
 
     case 'apiTareas':
@@ -149,12 +161,7 @@ switch ($accion) {
 
     case 'actualizarActividad':
 
-    $id = obtenerIdDeUrl();
-
-    if ($id === null) {
-        header('Location: index.php?accion=actividades');
-        exit;
-    }
+    $id = $_GET['id'];
 
     $datos = [
         'titulo' => $_POST['titulo'] ?? '',
@@ -175,12 +182,7 @@ switch ($accion) {
 
     case 'eliminarActividad':
 
-    $id = obtenerIdDeUrl();
-
-    if ($id === null) {
-        header('Location: index.php?accion=actividades');
-        exit;
-    }
+    $id = $_GET['id'];
 
     $actividadController->eliminar($id, $usuarioId);
 
@@ -191,22 +193,9 @@ switch ($accion) {
 
     case 'editarActividad':
 
-    $id = obtenerIdDeUrl();
-
-    if ($id === null) {
-        header('Location: index.php?accion=actividades');
-        exit;
-    }
+    $id = $_GET['id'];
 
     $actividad = $actividadController->buscarPorId($id, $usuarioId);
-
-    // FIX: si el id no existe o pertenece a otro usuario, buscarPorId()
-    // devuelve null y la vista editar.php intentaba leer $actividad['id'],
-    // $actividad['titulo'], etc. sobre null (warnings + formulario vacío).
-    if (!$actividad) {
-        header('Location: index.php?accion=actividades&error=' . urlencode('La actividad no existe o no tienes permiso para editarla.'));
-        exit;
-    }
 
     require_once __DIR__ . '/views/actividades/editar.php';
 
@@ -347,12 +336,7 @@ switch ($accion) {
 
     case 'eliminarTarea':
 
-    $id = obtenerIdDeUrl();
-
-    if ($id === null) {
-        header('Location: index.php?accion=tareas');
-        exit;
-    }
+    $id = $_GET['id'];
 
     $tareaController->eliminar($id, $usuarioId);
 
@@ -363,12 +347,7 @@ switch ($accion) {
 
     case 'actualizarTarea':
 
-    $id = obtenerIdDeUrl();
-
-    if ($id === null) {
-        header('Location: index.php?accion=tareas');
-        exit;
-    }
+    $id = $_GET['id'];
 
     $datos = [
         'titulo' => $_POST['titulo'] ?? '',
@@ -387,22 +366,9 @@ switch ($accion) {
 
     case 'editarTarea':
 
-    $id = obtenerIdDeUrl();
-
-    if ($id === null) {
-        header('Location: index.php?accion=tareas');
-        exit;
-    }
+    $id = $_GET['id'];
 
     $tarea = $tareaController->buscarPorId($id, $usuarioId);
-
-    // FIX: si el id no existe o pertenece a otro usuario, buscarPorId()
-    // devuelve null y la vista editar.php intentaba leer $tarea['id'],
-    // $tarea['titulo'], etc. sobre null (warnings + formulario vacío).
-    if (!$tarea) {
-        header('Location: index.php?accion=tareas&error=' . urlencode('La tarea no existe o no tienes permiso para editarla.'));
-        exit;
-    }
 
     require_once __DIR__ . '/views/tareas/editar.php';
 
@@ -899,16 +865,6 @@ switch ($accion) {
     </div>
 
 </div>
-
-<a class="btn btn-primary me-2 mt-4" href="index.php?accion=tareas">
-    <i class="bi bi-list-check"></i>
-    Ver tareas
-</a>
-
-<a class="btn btn-success mt-4" href="index.php?accion=actividades">
-    <i class="bi bi-calendar-event"></i>
-    Ver actividades
-</a>
 
 <?php require_once __DIR__ . '/views/layouts/footer.php'; ?>
 

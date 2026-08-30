@@ -6,6 +6,11 @@ class AuthController
 {
     private $usuario;
 
+    // Paletas de colores disponibles. Se valida contra esta lista tanto en
+    // el controlador como en el router, para que nunca se guarde un valor
+    // arbitrario en la base de datos.
+    public const TEMAS_VALIDOS = ['indigo', 'azul', 'verde', 'rosa', 'naranja'];
+
     public function __construct()
     {
         $this->usuario = new Usuario();
@@ -81,6 +86,7 @@ class AuthController
 
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
+        $_SESSION['tema'] = $usuario['tema'] ?? 'indigo';
 
         return ['exito' => true, 'error' => null];
     }
@@ -89,5 +95,19 @@ class AuthController
     {
         $_SESSION = [];
         session_destroy();
+    }
+
+    // Cambia la paleta de colores del usuario. Devuelve true/false según
+    // si el valor recibido es una paleta válida.
+    public function actualizarTema($usuarioId, $tema)
+    {
+        if (!in_array($tema, self::TEMAS_VALIDOS, true)) {
+            return false;
+        }
+
+        $this->usuario->actualizarTema($usuarioId, $tema);
+        $_SESSION['tema'] = $tema;
+
+        return true;
     }
 }

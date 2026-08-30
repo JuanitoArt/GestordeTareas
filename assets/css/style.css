@@ -8,6 +8,9 @@
 
     --color-primary: #4F46E5;
     --color-primary-hover: #4338CA;
+    --color-primary-light: #EEF2FF;
+    --color-primary-rgb: 79,70,229;
+    --color-primary-accent: #7C3AED;
 
     --color-success: #22C55E;
     --color-warning: #F59E0B;
@@ -23,6 +26,51 @@
 
     --shadow-sm: 0 4px 12px rgba(0,0,0,.05);
     --shadow-md: 0 8px 24px rgba(0,0,0,.08);
+
+}
+
+/* ---------- Paletas de colores ----------
+   El usuario elige una de estas desde el selector de tema en la navbar.
+   Se aplican sobre <body data-tema="..."> (ver views/layouts/header.php),
+   así que solo hace falta sobreescribir las variables de :root de arriba. */
+
+body[data-tema="azul"]{
+
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-light: #DBEAFE;
+    --color-primary-rgb: 37,99,235;
+    --color-primary-accent: #0EA5E9;
+
+}
+
+body[data-tema="verde"]{
+
+    --color-primary: #16A34A;
+    --color-primary-hover: #15803D;
+    --color-primary-light: #DCFCE7;
+    --color-primary-rgb: 22,163,74;
+    --color-primary-accent: #059669;
+
+}
+
+body[data-tema="rosa"]{
+
+    --color-primary: #DB2777;
+    --color-primary-hover: #BE185D;
+    --color-primary-light: #FCE7F3;
+    --color-primary-rgb: 219,39,119;
+    --color-primary-accent: #EC4899;
+
+}
+
+body[data-tema="naranja"]{
+
+    --color-primary: #EA580C;
+    --color-primary-hover: #C2410C;
+    --color-primary-light: #FFEDD5;
+    --color-primary-rgb: 234,88,12;
+    --color-primary-accent: #F59E0B;
 
 }
 
@@ -126,7 +174,7 @@ p{
 .form-control:focus,
 .form-select:focus{
 
-    box-shadow: 0 0 0 .2rem rgba(79,70,229,.20);
+    box-shadow: 0 0 0 .2rem rgba(var(--color-primary-rgb),.20);
 
     border-color: var(--color-primary);
 
@@ -188,7 +236,7 @@ thead{
 
     width:4px;
 
-    background:#0d6efd;
+    background:var(--color-primary);
 
     border-radius:20px;
 
@@ -218,10 +266,10 @@ thead{
 
     border-radius:50%;
 
-    background:#0d6efd;
+    background:var(--color-primary);
 
     border:4px solid white;
 
-    box-shadow:0 0 0 3px #0d6efd33;
+    box-shadow:0 0 0 3px var(--color-primary-light);
 
 }

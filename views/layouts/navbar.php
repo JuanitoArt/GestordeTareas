@@ -1,5 +1,16 @@
 <?php
 $accionActual = $_GET['accion'] ?? 'inicio';
+$temaActual = $_SESSION['tema'] ?? 'indigo';
+
+// Colores de vista previa para cada paleta (deben coincidir con las
+// variables --color-primary definidas por tema en assets/css/style.css)
+$temasDisponibles = [
+    'indigo' => '#4F46E5',
+    'azul' => '#2563EB',
+    'verde' => '#16A34A',
+    'rosa' => '#DB2777',
+    'naranja' => '#EA580C',
+];
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary rounded shadow-sm mb-4">
@@ -57,6 +68,47 @@ $accionActual = $_GET['accion'] ?? 'inicio';
                         Actividades
 
                     </a>
+
+                </li>
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+
+                        <i class="bi bi-palette-fill"></i>
+                        Tema
+
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-end p-3">
+
+                        <p class="small text-muted mb-2">Elige un color</p>
+
+                        <form method="POST" action="index.php?accion=actualizarTema" class="d-flex gap-2">
+
+                            <input type="hidden" name="volver_a" value="<?= htmlspecialchars($accionActual) ?>">
+
+                            <?php foreach ($temasDisponibles as $clave => $colorVistaPrevia): ?>
+
+                                <button
+                                    type="submit"
+                                    name="tema"
+                                    value="<?= $clave ?>"
+                                    class="tema-swatch <?= $temaActual === $clave ? 'tema-activo' : '' ?>"
+                                    style="background: <?= $colorVistaPrevia ?>;"
+                                    title="<?= ucfirst($clave) ?>"
+                                    aria-label="Tema <?= ucfirst($clave) ?>"
+                                ></button>
+
+                            <?php endforeach; ?>
+
+                        </form>
+
+                    </div>
 
                 </li>
 
@@ -149,6 +201,46 @@ $accionActual = $_GET['accion'] ?? 'inicio';
 
 </div>
 
+<div class="dropup">
+
+    <a href="#"
+       class="dropdown-toggle text-decoration-none"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+        <i class="bi bi-palette-fill"></i>
+        <span>Tema</span>
+
+    </a>
+
+    <div class="dropdown-menu shadow p-3">
+
+        <p class="small text-muted mb-2">Elige un color</p>
+
+        <form method="POST" action="index.php?accion=actualizarTema" class="d-flex gap-2">
+
+            <input type="hidden" name="volver_a" value="<?= htmlspecialchars($accionActual) ?>">
+
+            <?php foreach ($temasDisponibles as $clave => $colorVistaPrevia): ?>
+
+                <button
+                    type="submit"
+                    name="tema"
+                    value="<?= $clave ?>"
+                    class="tema-swatch <?= $temaActual === $clave ? 'tema-activo' : '' ?>"
+                    style="background: <?= $colorVistaPrevia ?>;"
+                    title="<?= ucfirst($clave) ?>"
+                    aria-label="Tema <?= ucfirst($clave) ?>"
+                ></button>
+
+            <?php endforeach; ?>
+
+        </form>
+
+    </div>
+
+</div>
+
 </nav>
 
 <style>
@@ -202,7 +294,7 @@ $accionActual = $_GET['accion'] ?? 'inicio';
 
     border-radius:50%;
 
-    background:#0d6efd;
+    background:var(--color-primary);
 
     color:white;
 
@@ -214,7 +306,7 @@ $accionActual = $_GET['accion'] ?? 'inicio';
 
     justify-content:center;
 
-    box-shadow:0 8px 20px rgba(13,110,253,.35);
+    box-shadow:0 8px 20px rgba(var(--color-primary-rgb),.35);
 
     cursor:pointer;
 
@@ -302,7 +394,7 @@ $accionActual = $_GET['accion'] ?? 'inicio';
 
     align-items:center;
 
-    color:#0d6efd;
+    color:var(--color-primary);
 
     font-size:1.2rem;
 
@@ -348,21 +440,21 @@ $accionActual = $_GET['accion'] ?? 'inicio';
 
 .bottom-nav a.active{
 
-    background:#EAF2FF;
+    background:var(--color-primary-light);
 
-    color:#0d6efd;
+    color:var(--color-primary);
 
 }
 
 .bottom-nav a.active i{
 
-    color:#0d6efd;
+    color:var(--color-primary);
 
 }
 
 .bottom-nav a:hover{
 
-    color:#0d6efd;
+    color:var(--color-primary);
 
 }
 
@@ -428,6 +520,40 @@ body{
 
 }
 
+/* ===== Selector de paleta de colores ===== */
+
+.tema-swatch{
+
+    width:32px;
+
+    height:32px;
+
+    border-radius:50%;
+
+    border:2px solid white;
+
+    box-shadow:0 0 0 1px rgba(0,0,0,.08);
+
+    cursor:pointer;
+
+    padding:0;
+
+    transition:.2s;
+
+}
+
+.tema-swatch:hover{
+
+    transform:scale(1.15);
+
+}
+
+.tema-swatch.tema-activo{
+
+    box-shadow:0 0 0 2px var(--color-primary);
+
+}
+
 /* ===== Asistente de voz ===== */
 
 .voz-widget{
@@ -446,13 +572,19 @@ body{
 
     align-items:flex-end;
 
-    gap:6px;
+    gap:8px;
 
 }
 
 .voz-btn-activar{
 
-    background:#0d6efd;
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:linear-gradient(135deg, var(--color-primary), var(--color-primary-accent));
 
     color:white;
 
@@ -460,35 +592,71 @@ body{
 
     border-radius:30px;
 
-    padding:10px 18px;
+    padding:12px 20px 12px 16px;
 
     font-weight:600;
 
-    box-shadow:0 8px 20px rgba(13,110,253,.35);
+    font-size:.9rem;
+
+    box-shadow:0 10px 25px rgba(var(--color-primary-rgb),.4);
 
     cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.voz-btn-activar::before{
+
+    content:"🎤";
+
+    font-size:1.1rem;
+
+}
+
+.voz-btn-activar:hover{
+
+    transform:translateY(-2px) scale(1.03);
+
+    box-shadow:0 14px 30px rgba(var(--color-primary-rgb),.5);
 
 }
 
 .voz-btn-desactivar{
 
-    background:#6c757d;
+    display:flex;
 
-    color:white;
+    align-items:center;
 
-    border:none;
+    gap:6px;
+
+    background:white;
+
+    color:#6c757d;
+
+    border:1.5px solid #e2e8f0;
 
     border-radius:30px;
 
     padding:8px 16px;
 
-    font-size:.85rem;
+    font-size:.8rem;
 
     font-weight:600;
 
-    box-shadow:0 8px 20px rgba(0,0,0,.2);
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
 
     cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.voz-btn-desactivar:hover{
+
+    border-color:#EF4444;
+
+    color:#EF4444;
 
 }
 
@@ -496,15 +664,17 @@ body{
 
     background:white;
 
-    border:2px solid #0d6efd;
+    border:none;
+
+    border-left:4px solid var(--color-primary);
 
     border-radius:14px;
 
-    padding:12px 14px;
+    padding:14px 16px;
 
     width:260px;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
 
     font-size:.9rem;
 
@@ -529,49 +699,81 @@ body{
 .voz-log-usuario,
 .voz-log-bot{
 
-    background:white;
+    border-radius:14px;
 
-    border-radius:12px;
+    padding:8px 12px;
 
-    padding:6px 10px;
+    font-size:.78rem;
 
-    font-size:.75rem;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
 
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    line-height:1.35;
 
 }
 
 .voz-log-usuario{
 
-    color:#212529;
+    background:var(--color-primary);
+
+    color:white;
 
     align-self:flex-end;
+
+    border-bottom-right-radius:4px;
 
 }
 
 .voz-log-bot{
 
-    color:#0d6efd;
+    background:white;
+
+    color:#1E293B;
 
     align-self:flex-start;
+
+    border-bottom-left-radius:4px;
 
 }
 
 .voz-badge{
 
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
     background:white;
 
     border-radius:20px;
 
-    padding:6px 14px;
+    padding:7px 16px;
 
     font-size:.8rem;
 
     color:#6c757d;
 
-    box-shadow:0 4px 12px rgba(0,0,0,.1);
+    box-shadow:0 4px 14px rgba(0,0,0,.1);
 
     border:2px solid transparent;
+
+    transition:.25s;
+
+}
+
+.voz-badge::before{
+
+    content:"";
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#cbd5e1;
+
+    flex-shrink:0;
 
 }
 
@@ -582,6 +784,24 @@ body{
     color:#16794a;
 
     font-weight:600;
+
+    box-shadow:0 4px 18px rgba(34,197,94,.25);
+
+}
+
+.voz-badge.voz-activo::before{
+
+    background:#22C55E;
+
+    animation:voz-pulso 1.4s ease-in-out infinite;
+
+}
+
+@keyframes voz-pulso{
+
+    0%   { box-shadow:0 0 0 0 rgba(34,197,94,.55); }
+    70%  { box-shadow:0 0 0 8px rgba(34,197,94,0); }
+    100% { box-shadow:0 0 0 0 rgba(34,197,94,0); }
 
 }
 
@@ -600,7 +820,7 @@ body{
 <div class="voz-widget">
 
     <button id="voz-activar" class="voz-btn-activar" type="button">
-        🎤 Activar asistente de voz
+        Activar asistente de voz
     </button>
 
     <button id="voz-desactivar" class="voz-btn-desactivar" type="button" style="display:none;">

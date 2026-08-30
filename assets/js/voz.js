@@ -41,13 +41,56 @@
     let modoEdicion = null;        // null | { tipo, id, campo, datos }
     let debeReiniciar = false;
     let timeoutComando = null;
+    let vozPreferida = null;
+
+    // FIX: antes se dejaba la voz por defecto del navegador (utterance.lang
+    // = 'es-ES' sin utterance.voice), que en muchos sistemas suena robótica.
+    // Ahora elegimos, entre las voces en español disponibles, la que suene
+    // más natural (voces "Google"/"Natural"/"Neural" si existen).
+    function elegirMejorVoz() {
+        if (!('speechSynthesis' in window)) return null;
+
+        const voces = window.speechSynthesis.getVoices();
+        if (!voces.length) return null;
+
+        const esVoces = voces.filter((v) => v.lang && v.lang.toLowerCase().startsWith('es'));
+        if (!esVoces.length) return null;
+
+        const prioridad = (v) => {
+            const nombre = v.name.toLowerCase();
+            if (nombre.includes('google')) return 0;
+            if (nombre.includes('natural') || nombre.includes('neural') || nombre.includes('online')) return 1;
+            if (v.lang.toLowerCase() === 'es-es') return 2;
+            return 3;
+        };
+
+        return esVoces.slice().sort((a, b) => prioridad(a) - prioridad(b))[0];
+    }
+
+    function cargarVozPreferida() {
+        vozPreferida = elegirMejorVoz();
+    }
+
+    if ('speechSynthesis' in window) {
+        cargarVozPreferida();
+        // Algunos navegadores (Chrome) cargan la lista de voces de forma
+        // asíncrona, por eso también escuchamos este evento.
+        window.speechSynthesis.onvoiceschanged = cargarVozPreferida;
+    }
 
     function hablar(texto) {
         agregarLog('bot', texto);
         if (!('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(texto);
-        utterance.lang = 'es-ES';
+
+        if (vozPreferida) {
+            utterance.voice = vozPreferida;
+            utterance.lang = vozPreferida.lang;
+        } else {
+            utterance.lang = 'es-ES';
+        }
+
         window.speechSynthesis.speak(utterance);
     }
 

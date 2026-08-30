@@ -28,6 +28,6 @@
 
 </head>
 
-<body class="bg-light">
+<body class="bg-light" data-tema="<?= htmlspecialchars($_SESSION['tema'] ?? 'indigo') ?>">
 
 <div class="container py-4">

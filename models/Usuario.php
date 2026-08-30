@@ -56,4 +56,17 @@ class Usuario
 
         return (int) $this->db->lastInsertId();
     }
+
+    // Actualiza la paleta de colores elegida por el usuario
+    public function actualizarTema($id, $tema)
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE usuarios SET tema = :tema WHERE id = :id"
+        );
+
+        return $stmt->execute([
+            'tema' => $tema,
+            'id' => (int) $id,
+        ]);
+    }
 }
