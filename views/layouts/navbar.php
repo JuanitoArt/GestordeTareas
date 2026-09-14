@@ -90,6 +90,8 @@ $temasDisponibles = [
 
                         <form method="POST" action="index.php?accion=actualizarTema" class="d-flex gap-2">
 
+                            <?= Csrf::campoOculto() ?>
+
                             <input type="hidden" name="volver_a" value="<?= htmlspecialchars($accionActual) ?>">
 
                             <?php foreach ($temasDisponibles as $clave => $colorVistaPrevia): ?>
@@ -218,6 +220,8 @@ $temasDisponibles = [
         <p class="small text-muted mb-2">Elige un color</p>
 
         <form method="POST" action="index.php?accion=actualizarTema" class="d-flex gap-2">
+
+            <?= Csrf::campoOculto() ?>
 
             <input type="hidden" name="volver_a" value="<?= htmlspecialchars($accionActual) ?>">
 

@@ -733,10 +733,26 @@
         return `${d.getFullYear()}-${mes}-${dia}`;
     }
 
+    // FIX: protección CSRF — el router ahora exige un token válido en todo
+    // POST. Lo leemos del <meta> que header.php imprime en cada página.
+    function obtenerTokenCSRF() {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        return meta ? meta.content : '';
+    }
+
+    function agregarCampoCSRF(form) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'csrf_token';
+        input.value = obtenerTokenCSRF();
+        form.appendChild(input);
+    }
+
     function enviarFormularioSimple(accion, id) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `index.php?accion=${accion}&id=${id}`;
+        agregarCampoCSRF(form);
         document.body.appendChild(form);
         form.submit();
     }
@@ -961,6 +977,7 @@
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = id ? `index.php?accion=${accion}&id=${id}` : `index.php?accion=${accion}`;
+        agregarCampoCSRF(form);
 
         Object.keys(datos).forEach(function (clave) {
             const input = document.createElement('input');

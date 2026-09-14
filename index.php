@@ -3,6 +3,7 @@
 session_start();
 
 require_once __DIR__ . '/config/zonahoraria.php';
+require_once __DIR__ . '/config/Csrf.php';
 require_once __DIR__ . '/controllers/TareaController.php';
 require_once __DIR__ . '/controllers/ActividadController.php';
 require_once __DIR__ . '/controllers/AuthController.php';
@@ -10,6 +11,15 @@ require_once __DIR__ . '/controllers/AuthController.php';
 $tareaController = new TareaController();
 $actividadController = new ActividadController();
 $authController = new AuthController();
+
+// FIX: protección CSRF. Cualquier petición POST debe traer el mismo token
+// que se generó para esta sesión (ver Csrf::campoOculto() en las vistas).
+// Sin esto, una página externa podría enviar formularios "a nombre" de un
+// usuario que tiene la sesión abierta en este sitio.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !Csrf::validar($_POST['csrf_token'] ?? '')) {
+    http_response_code(403);
+    die('Token de seguridad inválido o expirado. Vuelve atrás, recarga la página e inténtalo de nuevo.');
+}
 
 $accion = $_GET['accion'] ?? 'inicio';
 

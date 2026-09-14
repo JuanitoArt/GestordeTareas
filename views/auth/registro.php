@@ -25,6 +25,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
                 <form action="index.php?accion=procesarRegistro" method="POST">
 
+                    <?= Csrf::campoOculto() ?>
                     <div class="mb-3">
                         <label for="nombre_usuario" class="form-label">Nombre de usuario</label>
                         <input

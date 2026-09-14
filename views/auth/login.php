@@ -33,6 +33,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
                 <form action="index.php?accion=procesarLogin" method="POST">
 
+                    <?= Csrf::campoOculto() ?>
                     <div class="mb-3">
                         <label for="identificador" class="form-label">Usuario o correo</label>
                         <input

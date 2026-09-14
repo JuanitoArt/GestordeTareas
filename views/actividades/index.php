@@ -188,6 +188,8 @@ if ($dias == 0) {
                     onsubmit="return confirm('¿Eliminar actividad?')"
                     style="display:inline;">
 
+                    <?= Csrf::campoOculto() ?>
+
                     <button type="submit" class="btn btn-outline-danger btn-sm">
                         🗑️ Eliminar
                     </button>

@@ -18,6 +18,7 @@ require_once __DIR__ . '/../layouts/navbar.php';
 
                 <form action="index.php?accion=guardarTarea" method="POST">
 
+                    <?= Csrf::campoOculto() ?>
                     <div class="mb-3">
                         <label for="titulo" class="form-label">Título</label>
                         <input

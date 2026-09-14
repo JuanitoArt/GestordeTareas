@@ -258,6 +258,8 @@ require_once __DIR__ . '/../layouts/navbar.php';
                         onsubmit="return confirm('¿Seguro que deseas eliminar esta tarea?')"
                         style="display:inline;">
 
+                        <?= Csrf::campoOculto() ?>
+
                         <button type="submit" class="btn btn-outline-danger btn-sm">
                             🗑️ Eliminar
                         </button>
