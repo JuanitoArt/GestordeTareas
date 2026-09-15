@@ -116,7 +116,8 @@ $temasDisponibles = [
 
                 <li class="nav-item">
 
-                    <a class="nav-link" href="index.php?accion=logout">
+                    <a class="nav-link" href="index.php?accion=logout"
+                    onclick="return confirm('¿Seguro que quieres cerrar sesión?')">
 
                         <i class="bi bi-box-arrow-right"></i>
                         <?= htmlspecialchars($_SESSION['nombre_usuario'] ?? '') ?> · Salir
